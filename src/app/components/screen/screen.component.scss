@@ -1,0 +1,20 @@
+.body-container {
+    text-align: left;
+    overflow: auto; 
+    box-sizing: border-box;
+}
+
+ .body {
+    display: inline-block; 
+    margin: 0px;
+    padding: 0;
+    background-color: #0e1228;
+    margin-left: 300px;
+    width: calc(100% - 300px);
+    height:100%;
+    position: fixed;
+ }
+
+ .clearfix{
+	clear: both;
+}

@@ -1,0 +1,50 @@
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+
+<div class="container mt-4">
+    <h1 class="text-center">Subject Dashboard</h1>
+
+    <!-- Add Student Form -->
+    <div *ngIf="!showSubjectRecords">
+        <h2>Add Subject</h2>
+        <form [formGroup]="addForm" (ngSubmit)="addSubject()">
+          <div class="form-group">
+            <label for="subjectName">Subject Name:</label>
+            <input type="text" class="form-control" id="subjectName" formControlName="subjectName">
+          </div>
+
+          <div class="form-group">
+            <label for="subjectCode">Subject Code:</label>
+            <input type="text" class="form-control" id="subjectCode" formControlName="subjectCode">
+          </div>
+          <button type="submit" class="btn btn-primary">Add</button>
+          <button type="button" class="btn btn-secondary record-btn" (click)="toggleSections()">Records</button>
+        </form>
+      </div>
+
+    <!-- Student Records -->
+    <div *ngIf="showSubjectRecords">
+        <button class="btn btn-secondary return-btn" (click)="toggleSections()">Add New</button>
+        <h2>Subject Records</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Subject Name</th>
+                    <th>Subject Code</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let subject of subjects; let i = index">
+                    <td>{{ subject.subjectName }}</td>
+                    <td>{{ subject.subjectCode }}</td>
+                    <td>
+                        <button class="btn btn-info btn-sm" (click)="viewSubject(i)">View</button>
+                        <button class="btn btn-warning btn-sm edit-btn" (click)="editSubject(i)">Edit</button>
+                        <button class="btn btn-danger btn-sm delete-btn" (click)="deleteSubject(i)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

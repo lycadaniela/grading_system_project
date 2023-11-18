@@ -1,0 +1,11 @@
+<div class="dash-card">
+    <app-card *ngFor="let item of cardData"
+        title="{{item.title}}"
+        value="{{item.value}}"
+        icon="{{item.icon}}"
+    ></app-card>
+
+    <app-table></app-table> 
+    
+    <app-circle></app-circle>
+</div>
