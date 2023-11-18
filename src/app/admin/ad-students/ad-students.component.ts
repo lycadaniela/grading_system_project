@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Student } from 'src/shared_data/student';
 
@@ -8,66 +8,82 @@ import { Student } from 'src/shared_data/student';
   styleUrls: ['./ad-students.component.scss']
 })
 export class AdStudentsComponent implements OnInit {
-  
-  students: Student[] = [];
-  showAddStudentSection = true;
-  showStudentRecordsSection = false;
-  studentForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    this.studentForm = this.fb.group({
+  addForm: FormGroup;
+  students: { name: string; age: number }[] = [];
+  showStudentRecords = false;
+
+  toggleSections() {
+    this.showStudentRecords = !this.showStudentRecords;
+  }
+
+  renderStudents() {
+    // No need to implement this, as Angular's data binding will automatically update the view
+  }
+
+  constructor(private ngZone: NgZone, private formBuilder: FormBuilder) {
+    this.addForm = this.formBuilder.group({
       name: ['', Validators.required],
-      age: [null, Validators.required]
+      age: ['', [Validators.required, Validators.min(1)]],
     });
   }
 
-  ngOnInit(): void {
-    // Initialize students if needed
+  ngOnInit() {
+    // Retrieve data from localStorage on component initialization
+    const storedStudents = localStorage.getItem('students');
+    if (storedStudents) {
+      this.students = JSON.parse(storedStudents);
+    }
   }
 
-  toggleSections() {
-    this.showAddStudentSection = !this.showAddStudentSection;
-    this.showStudentRecordsSection = !this.showStudentRecordsSection;
+  addStudent() {
+    if (this.addForm.valid) {
+      this.ngZone.run(() => {
+        this.students.push({ ...this.addForm.value });
+        this.addForm.reset();
+        this.toggleSections();
+
+        // Store data in localStorage after adding a student
+        localStorage.setItem('students', JSON.stringify(this.students));
+      });
+    } else {
+      alert('Please provide valid name and age.');
+    }
   }
 
-  addStudent(): void {
-    const { name, age } = this.studentForm.value;
-    this.students.push({ name, age });
-    this.renderStudents();
-    this.resetForm();
-  }
-
-  viewStudent(index: number): void {
+  viewStudent(index: number) {
     const student = this.students[index];
     alert(`Student Name: ${student.name}\nStudent Age: ${student.age}`);
   }
 
-  editStudent(index: number): void {
-    const currentStudent = this.students[index];
-    const newName = prompt('Enter new name:', currentStudent.name) ?? currentStudent.name;
-    const newAgeInput = prompt('Enter new age:', String(currentStudent.age));
-    
-    // Check if newAgeInput is not null before converting to number
-    const newAge = newAgeInput !== null ? +newAgeInput : currentStudent.age;
-  
-    this.students[index] = { name: newName, age: newAge };
-    this.renderStudents();
-  }
+  editStudent(index: number) {
+    const newName = prompt('Enter new name:', this.students[index].name);
+    const newAgeString = prompt('Enter new age:', String(this.students[index].age));
 
-  deleteStudent(index: number): void {
-    if (confirm('Are you sure you want to delete this student?')) {
-      this.students.splice(index, 1);
-      this.renderStudents();
+    if (newName !== null && newAgeString !== null) {
+      const newAge = parseInt(newAgeString, 10);
+
+      if (!isNaN(newAge)) {
+        this.students[index].name = newName;
+        this.students[index].age = newAge;
+      } else {
+        // Handle invalid age input (not a number)
+        alert('Invalid age input. Please enter a valid number.');
+      }
     }
   }
 
-  private renderStudents(): void {
-    // Add logic to render students as needed
+  deleteStudent(index: number) {
+    if (confirm('Are you sure you want to delete this student?')) {
+      this.students.splice(index, 1);
+
+      // Update localStorage after deleting a student
+      this.updateLocalStorage();
+    }
   }
 
-  private resetForm(): void {
-    this.studentForm.reset();
+  private updateLocalStorage() {
+    localStorage.setItem('students', JSON.stringify(this.students));
   }
-  
   
 }

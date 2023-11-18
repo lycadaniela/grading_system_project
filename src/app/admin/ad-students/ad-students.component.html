@@ -1,26 +1,28 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
+
 <div class="container mt-4">
     <h1 class="text-center">Student Dashboard</h1>
 
     <!-- Add Student Form -->
-    <div *ngIf="showAddStudentSection">
+    <div *ngIf="!showStudentRecords">
         <h2>Add Student</h2>
-        <form [formGroup]="studentForm" (ngSubmit)="addStudent()">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" class="form-control" id="name" formControlName="name" required>
-            </div>
-            <div class="form-group">
-                <label for="age">Age:</label>
-                <input type="number" class="form-control" id="age" formControlName="age" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Add</button>
+        <form [formGroup]="addForm" (ngSubmit)="addStudent()">
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" formControlName="name">
+          </div>
+          <div class="form-group">
+            <label for="age">Age:</label>
+            <input type="number" class="form-control" id="age" formControlName="age">
+          </div>
+          <button type="submit" class="btn btn-primary">Add</button>
+          <button type="button" class="btn btn-secondary record-btn" (click)="toggleSections()">Records</button>
         </form>
-    </div>
+      </div>
 
     <!-- Student Records -->
-    <div *ngIf="showStudentRecordsSection">
+    <div *ngIf="showStudentRecords">
         <button class="btn btn-secondary return-btn" (click)="toggleSections()">Return</button>
         <h2>Student Records</h2>
         <table class="table table-striped">
@@ -37,8 +39,8 @@
                     <td>{{ student.age }}</td>
                     <td>
                         <button class="btn btn-info btn-sm" (click)="viewStudent(i)">View</button>
-                        <button class="btn btn-warning btn-sm" (click)="editStudent(i)">Edit</button>
-                        <button class="btn btn-danger btn-sm" (click)="deleteStudent(i)">Delete</button>
+                        <button class="btn btn-warning btn-sm edit-btn" (click)="editStudent(i)">Edit</button>
+                        <button class="btn btn-danger btn-sm delete-btn" (click)="deleteStudent(i)">Delete</button>
                     </td>
                 </tr>
             </tbody>
