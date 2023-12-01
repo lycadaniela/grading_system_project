@@ -10,58 +10,38 @@ const routes : Routes = [
 
     children:[
       {
-        path:"", redirectTo: "dashboard", pathMatch:"prefix",
+        path:"", redirectTo: "ad-dashboard", pathMatch:"prefix",
         
       },
 
       {
-        path:"dashboard",
+        path:"admin-dashboard",
         loadChildren:()=>import('./ad-dashboard/ad-dashboard.module').then(mod=>mod.AdDashboardModule)
       },
 
       {
-        path:"students",
+        path:"admin-students",
         loadChildren:()=>import('./ad-students/ad-students.module').then(mod=>mod.AdStudentsModule)
       },
 
       {
-        path:"teachers",
+        path:"admin-teachers",
         loadChildren:()=>import('./ad-teachers/ad-teachers.module').then(mod=>mod.AdTeachersModule)
       },
 
       {
-        path:"schoolyear",
-        loadChildren:()=>import('./ad-schoolyear/ad-schoolyear.module').then(mod=>mod.AdSchoolyearModule)
-      },
-
-      {
-        path:"subject",
+        path:"admin-subject",
         loadChildren:()=>import('./ad-subjects/ad-subjects.module').then(mod=>mod.AdSubjectsModule)
       },
 
       {
-        path:"subjectlist",
-        loadChildren:()=>import('./ad-subjectlist/ad-subjectlist.module').then(mod=>mod.AdSubjectlistModule)
+        path:"admin-class",
+        loadChildren:()=>import('./ad-class/ad-class.module').then(mod=>mod.AdClassModule)
       },
 
       {
-        path:"grades",
-        loadChildren:()=>import('./ad-grades/ad-grades.module').then(mod=>mod.AdGradesModule)
-      },
-
-      {
-        path:"quiz",
-        loadChildren:()=>import('./ad-quiz/ad-quiz.module').then(mod=>mod.AdQuizModule)
-      },
-
-      {
-        path:"passed",
-        loadChildren:()=>import('./ad-passed/ad-passed.module').then(mod=>mod.AdPassedModule)
-      },
-
-      {
-        path:"failed",
-        loadChildren:()=>import('./ad-failed/ad-failed.module').then(mod=>mod.AdFailedModule)
+        path:"admin-teachclass",
+        loadChildren:()=>import('./ad-teachclass/ad-teachclass.module').then(mod=>mod.AdTeachclassModule)
       }
     ]
   }

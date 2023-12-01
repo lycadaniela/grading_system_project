@@ -1,63 +1,62 @@
-<body><style>
-  body {
-    background-image: url('assets/images/wup.jpg'); 
-    background-size: cover; 
-  }
-</style>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
-<div class="section">
-  <div class="container">
-      <div class="row full-height justify-content-center">
-          <div class="col-12 text-center align-self-center py-5">
-              <div class="section pb-5 pt-5 pt-sm-2 text-center">
-                  <h6 class="mb-0 pb-3"><span> </span><span></span></h6>
-                    <input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
-                    <label for="reg-log"></label>
-                  <div class="card-3d-wrap mx-auto">
-                      <div class="card-3d-wrapper">
-                          <div class="card-front">
-                              <div class="center-wrap">
-                                  <div class="section text-center">
-                                      <h4 class="mb-4 pb-3">Log In</h4>
-                                      <div class="form-group">
-                                          <input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
-                                          <i class="input-icon uil uil-at"></i>
-                                      </div>	
-                                      <div class="form-group mt-2">
-                                          <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
-                                          <i class="input-icon uil uil-lock-alt"></i>
-                                      </div>
-                                      <a href="dashboard" class="btn mt-4">submit</a>
-                                      <p class="mb-0 mt-4 text-center"><a href="login" class="link">Forgot your password?</a></p>
-                                    </div>
-                                </div>
-                            </div>
-                          <div class="card-back">
-                              <div class="center-wrap">
-                                  <div class="section text-center">
-                                      <h4 class="mb-4 pb-3">Sign Up</h4>
-                                      <div class="form-group">
-                                          <input type="text" name="logname" class="form-style" placeholder="Your Full Name" id="logname" autocomplete="off">
-                                          <i class="input-icon uil uil-user" href="registration"></i>
-                                          
-                                      </div>	
-                                      <div class="form-group mt-2">
-                                          <input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
-                                          <i class="input-icon uil uil-at"></i>
-                                      </div>	
-                                      <div class="form-group mt-2">
-                                          <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
-                                          <i class="input-icon uil uil-lock-alt"></i>
-                                      </div>
-                                      <a href="login" class="btn mt-4">submit</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+      <div class="bg-image">
+        <div class="container">
+          <div class="row justify-content-center align-items-center vh-100">
+            <div class="col-md-6">
+              <div class="login-form p-4">
+                <h2 class="text-center mb-4">{{ isLoginMode ? 'Login' : 'Registration' }}</h2>
+                <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="login()">
+                  <div class="form-group">
+                    <label for="userType">I am a...</label>
+                    <select class="form-control" id="userType" formControlName="userType">
+                      <option value="admin">Admin</option>
+                      <option value="student">Teacher</option>
+                      <option value="teacher">Student</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="loginUsername">Username</label>
+                    <input type="text" class="form-control" id="loginUsername" formControlName="username" placeholder="Enter username">
+                  </div>
+                  <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" class="form-control" id="loginPassword" formControlName="password" placeholder="Enter password">
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-block">Login</button>
+                </form>
+
+                <form *ngIf="!isLoginMode" [formGroup]="registrationForm" (ngSubmit)="register()">
+                    <div class="form-group">
+                      <label for="userType">Register as ...</label>
+                      <select class="form-control" id="userType" formControlName="userType">
+                        <option value="admin">Admin</option>
+                        <option value="student">Teacher</option>
+                        <option value="teacher">Student</option>
+                      </select>
                     </div>
-                </div>
+                    <div class="form-group">
+                <label for="registerUsername">Username</label>
+                <input type="text" class="form-control" id="registerUsername" formControlName="username" placeholder="Enter username">
+              </div>
+              <div class="form-group">
+                <label for="registerPassword">Password</label>
+                <input type="password" class="form-control" id="registerPassword" formControlName="password" placeholder="Enter password">
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Register</button>
+                  </form>
+
+                  <p class="mt-3 text-center">
+                    {{ isLoginMode ? 'Not registered? ' : 'Already registered? ' }}
+                    <a href="#" (click)="toggleMode($event)">
+                      {{ isLoginMode ? 'Register here' : 'Login here' }}
+                    </a>
+                  </p>
+
+              </div>
             </div>
+          </div>
         </div>
-  </div>
-</div>
-</body>
+      </div>
+  
+  

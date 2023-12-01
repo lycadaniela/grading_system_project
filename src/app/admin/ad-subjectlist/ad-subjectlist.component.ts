@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { subjectlist_data } from 'src/shared_data/subjectlist';
+//import { subjectlist_data } from 'src/shared_data/teachclass';
 
 @Component({
   selector: 'app-ad-subjectlist',
@@ -8,7 +8,7 @@ import { subjectlist_data } from 'src/shared_data/subjectlist';
 })
 export class AdSubjectlistComponent implements OnInit {
 
-  subjectlistData = subjectlist_data;
+  //subjectlistData = subjectlist_data;
 
   constructor() { }
 

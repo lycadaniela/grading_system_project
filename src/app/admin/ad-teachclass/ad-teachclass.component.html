@@ -1,0 +1,14 @@
+
+<h1>Teacher -> Class</h1>
+
+
+<br><br>
+
+
+<div class="dash-card">
+    <app-card *ngFor="let item of teachClassData"
+        title="{{item.classNameBlock}}"
+        value="{{item.teacherName}}"
+        design="design2"
+    ></app-card>
+</div>

@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdFailedComponent } from './ad-failed.component';
+import { TeacherComponent } from './teacher.component';
 import { Routes, RouterModule } from '@angular/router';
 
 const routes : Routes = [
   {
-    path:'', component:AdFailedComponent
+    path:"",
+    component: TeacherComponent
   }
 ]
 
@@ -14,4 +15,4 @@ const routes : Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdFailedRoutingModule { }
+export class TeacherRoutingModule { }

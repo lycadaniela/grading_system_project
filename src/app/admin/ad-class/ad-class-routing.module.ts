@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdPassedComponent } from './ad-passed.component';
+import { AdClassComponent } from './ad-class.component';
 import { Routes, RouterModule } from '@angular/router';
 
 const routes : Routes = [
   {
-    path:'', component:AdPassedComponent
+    path:'', component:AdClassComponent
   }
 ]
 
@@ -14,4 +14,4 @@ const routes : Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdPassedRoutingModule { }
+export class AdClassRoutingModule { }

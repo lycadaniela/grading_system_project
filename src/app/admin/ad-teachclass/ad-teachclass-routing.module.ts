@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdGradesComponent } from './ad-grades.component';
+import { AdTeachclassComponent } from './ad-teachclass.component';
 import { Routes, RouterModule } from '@angular/router';
-
-
 
 const routes : Routes = [
   {
-    path:'', component:AdGradesComponent
+    path:'', component:AdTeachclassComponent
   }
 ]
 
@@ -16,4 +14,4 @@ const routes : Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdGradesRoutingModule { }
+export class AdTeachclassRoutingModule { }

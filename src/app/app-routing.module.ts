@@ -15,6 +15,16 @@ const routes: Routes = [
   {
     path: "login",
     loadChildren: ()=>import('./login/login.module').then(mod=>mod.LoginModule)
+  },
+
+  {
+    path: "",
+    loadChildren: ()=>import('./teacher/teacher.module').then(mod=>mod.TeacherModule)
+  },
+
+  {
+    path: "",
+    loadChildren: ()=>import('./student/student.module').then(mod=>mod.StudentModule)
   }
   
 ];

@@ -1,0 +1,48 @@
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+
+<div class="container mt-4">
+    <h1 class="text-center">Class Dashboard</h1>
+
+    <div *ngIf="!showClassRecords">
+        <h2>Add Class</h2>
+        <form [formGroup]="addForm" (ngSubmit)="addClass()">
+          <div class="form-group">
+            <label for="className">Class Name:</label>
+            <input type="text" class="form-control" id="className" formControlName="className">
+          </div>
+
+          <div class="form-group">
+            <label for="yearLevel">Year Level:</label>
+            <input type="text" class="form-control" id="yearLevel" formControlName="yearLevel">
+          </div>
+          <button type="submit" class="btn btn-primary">Add</button>
+          <button type="button" class="btn btn-secondary record-btn" (click)="toggleSections()">Records</button>
+        </form>
+      </div>
+
+    <div *ngIf="showClassRecords">
+        <button class="btn btn-secondary return-btn" (click)="toggleSections()">Add New</button>
+        <h2>Class Records</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Class Name</th>
+                    <th>Year Level</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let class of classes; let i = index">
+                    <td>{{ class.className }}</td>
+                    <td>{{ class.yearLevel }}</td>
+                    <td>
+                        <button class="btn btn-info btn-sm" (click)="viewClass(i)">View</button>
+                        <button class="btn btn-warning btn-sm edit-btn" (click)="editClass(i)">Edit</button>
+                        <button class="btn btn-danger btn-sm delete-btn" (click)="deleteClass(i)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
