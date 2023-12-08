@@ -1,23 +1,24 @@
 /* app.component.css */
 .body-container {
-    text-align: left;
-    overflow: hidden;
-    box-sizing: border-box;
-    height: 100vh;
-  }
+  text-align: left;
+  overflow: hidden;
+  box-sizing: border-box;
+  height: 100vh;
+}
+
   
-  .body {
-    display: inline-block;
-    margin: 0;
-    padding: 0;
-    background-color: #0e1228;
-    width: calc(100vw - 300px); /* Adjusted width considering the side navigation */
-    height: 100vh;
-    position: fixed;
-    overflow-y: auto;
-    margin-left: 300px; /* Adjusted margin-left considering the side navigation */
-    z-index: 1; /* Ensure the content is behind the side navigation */
-  }
+.body {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  background-color: #0e1228;
+  width: calc(100vw - 300px); /* Adjusted width considering the side navigation */
+  height: 100vh;
+  position: fixed;
+  overflow-y: auto;
+  margin-left: 300px; /* Adjusted margin-left considering the side navigation */
+  z-index: 1; /* Ensure the content is behind the side navigation */
+}
   
   /* Additional styles to avoid content going behind the nav */
   .router-outlet {
@@ -27,4 +28,10 @@
 
  .clearfix{
 	clear: both;
+}
+
+@media (max-width: 768px) {
+  .card {
+      width: 100%;
+  }
 }

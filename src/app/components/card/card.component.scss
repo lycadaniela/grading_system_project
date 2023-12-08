@@ -1,39 +1,42 @@
 .card {
-	width: 85%;
-	height: 120px;
-	background-color: #272c4a;
-	margin: 16px;
-	padding:10px;
-  
+    box-sizing: border-box;
+    width: 80vw; /* Set the width to 100% to make it adjust dynamically */
+    height: 120px;
+    background-color: #272c4a;
+    margin: 16px;
+    margin-bottom: 20px;
+    padding: 10px;
 }
-.box p{
-	font-size: 35px;
+
+.box p {
+    font-size: 35px;
     color: white;
     font-weight: bold;
     line-height: 30px;
     padding-left: 10px;
     margin-top: 20px;
     display: inline-block;
-    
 }
-.box p span{
-	font-size: 20px;
-	font-weight: 400;
-	color: #818181;
+
+.box p span {
+    font-size: 20px;
+    font-weight: 400;
+    color: #818181;
 }
-.box-icon{
-	font-size: 40px!important;
+
+.box-icon {
+    font-size: 40px !important;
     float: right;
-    margin-top: 35px!important;
+    margin-top: 35px !important;
     color: #f16666;
     padding-right: 10px;
 }
-
 
 .design2 {
     width: 250px;
     background-color: #fff;
     border: 1px solid #ddd;
+    border-radius: 5px;
     padding: 15px;
     margin: 10px;
     text-align: center;
@@ -56,4 +59,10 @@
     color: #666;
     margin-bottom: 20px;
     text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+    .card {
+        width: 100%; /* Adjust as needed for smaller screens */
+    }
 }
