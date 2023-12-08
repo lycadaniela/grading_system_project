@@ -1,7 +1,6 @@
-<div class="card" style="width: 17rem;" [ngClass]="{'design1': design === 'design1', 'design2': design === 'design2'}">
+<div class="card" style="width: 17rem;" [ngClass]="{'design1': design === 'design1', 'design2': design === 'design2'}" (click)="navigateToPage()">
     <div class="box">
         <p>{{value}}<br/><span>{{title}}</span></p>
         <i [class]="icon"></i>
     </div>
 </div>
-

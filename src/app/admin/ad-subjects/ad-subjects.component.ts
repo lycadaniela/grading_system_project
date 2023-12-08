@@ -7,6 +7,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./ad-subjects.component.scss']
 })
 export class AdSubjectsComponent implements OnInit {
+  searchTerm: string = '';
 
   toggleSections() {
     this.showSubjectRecords = !this.showSubjectRecords;
@@ -51,6 +52,35 @@ addSubject() {
     alert('Please provide valid subject name and code.');
   }
 }
+
+searchSubjects() {
+  if (this.searchTerm.trim() !== '') {
+    const searchResults = this.subjects.filter((subject) =>
+      subject.subjectName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      subject.subjectCode.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+
+    if (searchResults.length > 0) {
+      this.subjects = [...searchResults];
+    } else {
+      alert('No matching subjects found.');
+    }
+  } else {
+    alert('Please enter a search term.');
+  }
+}
+
+resetSearch() {
+  this.searchTerm = '';
+  const storedSubjects = localStorage.getItem('subjects');
+  
+  if (storedSubjects) {
+    this.subjects = JSON.parse(storedSubjects);
+  } else {
+    this.subjects = [];
+  }
+}
+
 
 viewSubject(index: number) {
     const subject = this.subjects[index];

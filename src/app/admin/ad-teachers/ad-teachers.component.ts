@@ -7,6 +7,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./ad-teachers.component.scss']
 })
 export class AdTeachersComponent implements OnInit {
+  searchTerm: string = '';
 
   toggleSections() {
     this.showTeacherRecords = !this.showTeacherRecords;
@@ -49,6 +50,34 @@ addTeacher() {
     });
   } else {
     alert('Please provide valid name and subject.');
+  }
+}
+
+searchTeachers() {
+  if (this.searchTerm.trim() !== '') {
+    const searchResults = this.teachers.filter((teacher) =>
+      teacher.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      teacher.subject.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+
+    if (searchResults.length > 0) {
+      this.teachers = [...searchResults];
+    } else {
+      alert('No matching teachers found.');
+    }
+  } else {
+    alert('Please enter a search term.');
+  }
+}
+
+resetSearch() {
+  this.searchTerm = '';
+  const storedTeachers = localStorage.getItem('teachers');
+  
+  if (storedTeachers) {
+    this.teachers = JSON.parse(storedTeachers);
+  } else {
+    this.teachers = [];
   }
 }
 

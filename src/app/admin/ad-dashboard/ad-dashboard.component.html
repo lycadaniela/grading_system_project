@@ -1,9 +1,28 @@
+<div id="main">
+    <div class="head">
+        <div class="col-div-6">
+            <span style="font-size:30px;cursor:pointer; color: white;" class="nav"  >Dashboard Grading System</span>
+        </div>
+    
+    <div class="col-div-6">
+        <div class="profile">
+            <img src="assets/images/admin.png" class="pro-img" />
+            <p>Admin <span>BSIT 3-1</span></p>
+        </div>
+    </div>
+
+        <div class="clearfix"></div>
+    </div>
+</div>
+
 <div class="dash-card">
     <app-card *ngFor="let item of cardData"
-        title="{{item.title}}"
-        value="{{item.value}}"
-        icon="{{item.icon}}"
-    ></app-card>
+          [title]="item.title"
+          [value]="item.value"
+          [icon]="item.icon"
+          [design]="item.design"
+          [destination]="item.destination"
+></app-card>
 
     <app-table></app-table> 
 </div>

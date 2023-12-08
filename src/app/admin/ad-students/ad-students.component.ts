@@ -8,7 +8,9 @@ import { Student } from 'src/shared_data/student';
   styleUrls: ['./ad-students.component.scss']
 })
 export class AdStudentsComponent implements OnInit {
+  searchTerm: string = '';
 
+  originalStudents: { name: string; age: number }[] = [];
   addForm: FormGroup;
   students: { name: string; age: number }[] = [];
   showStudentRecords = false;
@@ -16,7 +18,6 @@ export class AdStudentsComponent implements OnInit {
   toggleSections() {
     this.showStudentRecords = !this.showStudentRecords;
   }
-
   renderStudents() {
     // No need to implement this, as Angular's data binding will automatically update the view
   }
@@ -32,12 +33,13 @@ export class AdStudentsComponent implements OnInit {
     // Retrieve data from localStorage on component initialization
     const storedStudents = localStorage.getItem('students');
     if (storedStudents) {
-      this.students = JSON.parse(storedStudents);
+      this.originalStudents = JSON.parse(storedStudents);
+      this.students = [...this.originalStudents];
     }
     
-    this.showStudentRecords =true;
+    this.showStudentRecords = true;
   }
-
+  
   addStudent() {
     if (this.addForm.valid) {
       this.ngZone.run(() => {
@@ -51,6 +53,29 @@ export class AdStudentsComponent implements OnInit {
     } else {
       alert('Please provide valid name and age.');
     }
+  }
+
+
+  searchStudent() {
+    if (this.searchTerm.trim() !== '') {
+      const searchResults = this.originalStudents.filter((student) =>
+        student.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+  
+      if (searchResults.length > 0) {
+        this.students = [...searchResults];
+      } else {
+        alert('No matching students found.');
+        this.resetSearch(); // Reset only when no matching students are found
+      }
+    } else {
+      alert('Please enter a search term.');
+    }
+  }
+  
+  resetSearch() {
+    this.searchTerm = '';
+    this.students = [...this.originalStudents];
   }
 
   viewStudent(index: number) {

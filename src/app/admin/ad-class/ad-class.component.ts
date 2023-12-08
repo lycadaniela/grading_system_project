@@ -7,6 +7,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./ad-class.component.scss']
 })
 export class AdClassComponent implements OnInit {
+  searchTerm: string = '';
 
   toggleSections() {
     this.showClassRecords = !this.showClassRecords;
@@ -16,27 +17,29 @@ renderStudents() {
     // No need to implement this, as Angular's data binding will automatically update the view
 }
 
-addForm: FormGroup;
-classes: { className: string; yearLevel: string }[] = [];
-showClassRecords = false;
+originalClasses: { className: string; yearLevel: string }[] = [];
+  addForm: FormGroup;
+  classes: { className: string; yearLevel: string }[] = [];
+  showClassRecords = false;
 
-constructor(private ngZone: NgZone, private formBuilder: FormBuilder) {
-  this.addForm = this.formBuilder.group({
-    className: ['', Validators.required],
-    yearLevel: ['', Validators.required],
-  });
-}
+  constructor(private ngZone: NgZone, private formBuilder: FormBuilder) {
+    this.addForm = this.formBuilder.group({
+      className: ['', Validators.required],
+      yearLevel: ['', Validators.required],
+    });
+  }
 
-ngOnInit() {
-  // Retrieve data from localStorage on component initialization
-  const storedClass = localStorage.getItem('classes');
+  ngOnInit() {
+    // Retrieve data from localStorage on component initialization
+    const storedClass = localStorage.getItem('classes');
     if (storedClass) {
-      this.classes = JSON.parse(storedClass);
+      this.originalClasses = JSON.parse(storedClass);
+      this.classes = [...this.originalClasses];
     }
 
     // Set showClassRecords to true to display class records by default
     this.showClassRecords = true;
-}
+  }
 
 addClass() {
   if (this.addForm.valid) {
@@ -51,6 +54,28 @@ addClass() {
   } else {
     alert('Please provide valid class name and year level.');
   }
+}
+
+searchClasses() {
+  if (this.searchTerm.trim() !== '') {
+    const searchResults = this.originalClasses.filter((cls) =>
+      cls.className.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+
+    if (searchResults.length > 0) {
+      this.classes = [...searchResults];
+    } else {
+      alert('No matching classes found.');
+      this.resetSearch();
+    }
+  } else {
+    alert('Please enter a search term.');
+  }
+}
+
+resetSearch() {
+  this.searchTerm = '';
+  this.classes = [...this.originalClasses];
 }
 
 viewClass(index: number) {
