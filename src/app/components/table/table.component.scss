@@ -1,31 +1,37 @@
-.content-box{
-	padding: 20px;
-    background: #272c4a;
-    border-radius: 25px;
-    margin: 16px;
+.content-box {
+  padding: 20px;
+  background: #272c4a;
+  margin: 16px;
 }
-.content-box p{
-	margin: 0px;
-    font-size: 20px;
-    color: #f9f9f9;
+
+.content-box p {
+  margin: 0px;
+  font-size: 20px;
+  color: #f9f9f9;
 }
-.content-box p span{
-	float: right;
-    background-color: #ddd;
-    padding: 3px 10px;
-    font-size: 15px;
+
+.content-box p span {
+  float: right;
+  background-color: #ddd;
+  padding: 3px 10px;
+  font-size: 15px;
 }
 
 table {
   font-family: arial, sans-serif;
-  border-collapse: collapse;
   width: 100%;
-  
+  border-collapse: collapse;
 }
+
 td, th {
   text-align: left;
-  padding:15px;
+  padding: 15px;
   color: #ddd;
   border-bottom: 1px solid #81818140;
-  
+}
+
+@media (max-width: 768px) {
+  table {
+      width: 100%;
+  }
 }
