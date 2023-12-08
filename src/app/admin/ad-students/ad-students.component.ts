@@ -34,6 +34,8 @@ export class AdStudentsComponent implements OnInit {
     if (storedStudents) {
       this.students = JSON.parse(storedStudents);
     }
+    
+    this.showStudentRecords =true;
   }
 
   addStudent() {

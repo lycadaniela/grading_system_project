@@ -20,7 +20,7 @@ export const card_data = [
     {
         title : "Subjects",
         value: "75",
-        icon: "fa fa-list box-icon"
+        icon: "fa fa-book box-icon"
     }
 
     

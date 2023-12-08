@@ -33,6 +33,8 @@ ngOnInit() {
   if (storedTeachers) {
     this.teachers = JSON.parse(storedTeachers);
   }
+
+  this.showTeacherRecords =true;
 }
 
 addTeacher() {

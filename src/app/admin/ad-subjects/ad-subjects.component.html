@@ -31,14 +31,14 @@
                 <tr>
                     <th>Subject Name</th>
                     <th>Subject Code</th>
-                    <th>Action</th>
+                    <th colspan="3" class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let subject of subjects; let i = index">
                     <td>{{ subject.subjectName }}</td>
                     <td>{{ subject.subjectCode }}</td>
-                    <td>
+                    <td colspan="3" class="text-center">
                         <button class="btn btn-info btn-sm" (click)="viewSubject(i)">View</button>
                         <button class="btn btn-warning btn-sm edit-btn" (click)="editSubject(i)">Edit</button>
                         <button class="btn btn-danger btn-sm delete-btn" (click)="deleteSubject(i)">Delete</button>

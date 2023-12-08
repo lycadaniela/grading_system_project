@@ -33,6 +33,8 @@ ngOnInit() {
   if (storedSubject) {
     this.subjects = JSON.parse(storedSubject);
   }
+
+  this.showSubjectRecords =true;
 }
 
 addSubject() {

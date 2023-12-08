@@ -30,9 +30,12 @@ constructor(private ngZone: NgZone, private formBuilder: FormBuilder) {
 ngOnInit() {
   // Retrieve data from localStorage on component initialization
   const storedClass = localStorage.getItem('classes');
-  if (storedClass) {
-    this.classes = JSON.parse(storedClass);
-  }
+    if (storedClass) {
+      this.classes = JSON.parse(storedClass);
+    }
+
+    // Set showClassRecords to true to display class records by default
+    this.showClassRecords = true;
 }
 
 addClass() {

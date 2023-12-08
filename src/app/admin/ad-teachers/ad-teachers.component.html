@@ -30,14 +30,14 @@
                 <tr>
                     <th>Name</th>
                     <th>Subject</th>
-                    <th>Action</th>
+                    <th colspan="3" class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let teacher of teachers; let i = index">
                     <td>{{ teacher.name }}</td>
                     <td>{{ teacher.subject }}</td>
-                    <td>
+                    <td colspan="3" class="text-center">
                         <button class="btn btn-info btn-sm" (click)="viewTeacher(i)">View</button>
                         <button class="btn btn-warning btn-sm edit-btn" (click)="editTeacher(i)">Edit</button>
                         <button class="btn btn-danger btn-sm delete-btn" (click)="deleteTeacher(i)">Delete</button>

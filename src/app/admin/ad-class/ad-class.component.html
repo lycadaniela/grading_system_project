@@ -29,14 +29,14 @@
                 <tr>
                     <th>Class Name</th>
                     <th>Year Level</th>
-                    <th>Action</th>
+                    <th class="text-center" colspan="3">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let class of classes; let i = index">
-                    <td>{{ class.className }}</td>
+                    <td>{{ class.className }}</td>  
                     <td>{{ class.yearLevel }}</td>
-                    <td>
+                    <td colspan="3" class="text-center">
                         <button class="btn btn-info btn-sm" (click)="viewClass(i)">View</button>
                         <button class="btn btn-warning btn-sm edit-btn" (click)="editClass(i)">Edit</button>
                         <button class="btn btn-danger btn-sm delete-btn" (click)="deleteClass(i)">Delete</button>
