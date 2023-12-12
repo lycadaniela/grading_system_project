@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -6,113 +6,142 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   templateUrl: './ad-subjects.component.html',
   styleUrls: ['./ad-subjects.component.scss']
 })
-export class AdSubjectsComponent implements OnInit {
-  searchTerm: string = '';
+export class AdSubjectsComponent {
 
-  toggleSections() {
-    this.showSubjectRecords = !this.showSubjectRecords;
-}
+  currentSection: string = 'records';
+  recordsData: any[] = [];
+  selectedRecord: any = { course: '', code: '', instructor: '', classes: '' };
+  editingRecord: any = null;
+  
 
-renderStudents() {
-    // No need to implement this, as Angular's data binding will automatically update the view
-}
+  // Form data properties
+  course: string = '';
+  code: string = '';
+  instructor: string = '';
+  classes: string = '';
 
-addForm: FormGroup;
-subjects: { subjectName: string; subjectCode: string }[] = [];
-showSubjectRecords = false;
-
-constructor(private ngZone: NgZone, private formBuilder: FormBuilder) {
-  this.addForm = this.formBuilder.group({
-    subjectName: ['', Validators.required],
-    subjectCode: ['', Validators.required],
-  });
-}
-
-ngOnInit() {
-  // Retrieve data from localStorage on component initialization
-  const storedSubject = localStorage.getItem('subjects');
-  if (storedSubject) {
-    this.subjects = JSON.parse(storedSubject);
+  constructor(private cdr: ChangeDetectorRef, private ngZone: NgZone) {
+    // Initialize recordsData with sample data
+    this.recordsData = [
+      // Add more data as needed
+    ];
   }
+  
 
-  this.showSubjectRecords =true;
-}
-
-addSubject() {
-  if (this.addForm.valid) {
+  toggleSection(section: string, record?: any) {
+    console.log('Toggling section:', section, 'Record:', record);
+  
     this.ngZone.run(() => {
-      this.subjects.push({ ...this.addForm.value });
-      this.addForm.reset();
-      this.toggleSections();
-
-      // Store data in localStorage after adding a student
-      localStorage.setItem('subjects', JSON.stringify(this.subjects));
+      this.currentSection = section;
+  
+      if (section !== 'view-form') {
+        this.selectedRecord = null;
+      }
+  
+      this.cdr.detectChanges();
     });
-  } else {
-    alert('Please provide valid subject name and code.');
   }
-}
 
-searchSubjects() {
-  if (this.searchTerm.trim() !== '') {
-    const searchResults = this.subjects.filter((subject) =>
-      subject.subjectName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      subject.subjectCode.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
+  submitForm() {
+    const formData = {
+      id: this.nextRecordId++,
+      course: this.course,
+      code: this.code,
+      instructor: this.instructor,
+      classes: this.classes,
+    };
+  
+    this.recordsData.push(formData);
+    this.filteredRecordsData = [...this.recordsData];
+  
+    this.clearForm();
+    this.toggleSection('records');
+  }
 
-    if (searchResults.length > 0) {
-      this.subjects = [...searchResults];
+  clearForm() {
+    this.course = '';
+    this.code = '';
+    this.instructor = '';
+    this.classes = '';
+  }
+
+  viewRecord(record: any) {
+    this.selectedRecord = record;
+    this.toggleSection('view-form');
+  }
+
+  deleteRecord(record: any) {
+    const index = this.recordsData.indexOf(record);
+    if (index !== -1) {
+      this.recordsData.splice(index, 1);
+  
+      // Update filteredRecordsData after deletion
+      this.filteredRecordsData = this.recordsData.filter(item =>
+        item.department.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        item.yearLevel.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+  
+      console.log('Data deleted:', record);
     } else {
-      alert('No matching subjects found.');
+      console.error('Record not found in recordsData.');
     }
-  } else {
-    alert('Please enter a search term.');
   }
+
+  editRecord(record: any) {
+    console.log('Editing Record:', record);
+    // Set editingRecord to a copy of the selected record
+    this.editingRecord = { ...record, id: record.id }; // Ensure 'id' is set
+    console.log('Editing Record (after assignment):', this.editingRecord);
+    this.toggleSection('edit-form');
+  }
+
+  updateRecord() {
+    // Find the index of the record to update
+    const index = this.recordsData.findIndex(record => record.id === this.editingRecord.id);
+  
+    if (index !== -1) {
+      // Update the record
+      this.recordsData[index] = { ...this.editingRecord };
+  
+      // Update filteredRecordsData as well
+      this.searchRecords();
+  
+      console.log('Record updated:', this.recordsData[index]);
+      console.log('Updated recordsData:', this.recordsData);
+      console.log('Filtered recordsData:', this.filteredRecordsData);
+  
+      this.clearEditForm();
+      this.toggleSection('records');
+    } else {
+      console.error('Record not found in recordsData.');
+    }
+  }
+
+  clearEditForm() {
+    this.editingRecord = null;
+  }
+
+  ngOnInit() {
+    console.log('Initial recordsData:', this.recordsData);
+  }
+
+  // Add the searchTerm property at the top of your component
+searchTerm: string = '';
+filteredRecordsData: any[] = [];
+
+searchRecords() {
+  // Perform the search based on the searchTerm
+  this.filteredRecordsData = this.recordsData.filter(item =>
+      item.department.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      item.yearLevel.toLowerCase().includes(this.searchTerm.toLowerCase())
+  );
 }
 
 resetSearch() {
-  this.searchTerm = '';
-  const storedSubjects = localStorage.getItem('subjects');
-  
-  if (storedSubjects) {
-    this.subjects = JSON.parse(storedSubjects);
-  } else {
-    this.subjects = [];
-  }
+  this.searchTerm = ''; // Reset the search term
+  this.searchRecords(); // Call the searchRecords method to reset the table
 }
 
-
-viewSubject(index: number) {
-    const subject = this.subjects[index];
-    alert(`Subject Name: ${subject.subjectName}\nSubject Code: ${subject.subjectCode}`);
-}
-
-editSubject(index: number) {
-  const currentSubject = this.subjects[index];
-
-  const newSubjectName = prompt('Enter new subject name:', currentSubject.subjectName);
-  const newSubjectCode = prompt('Enter new subject code:', currentSubject.subjectCode);
-
-  if (newSubjectName !== null && newSubjectCode !== null) {
-    // Update the teacher details if the user provided new values
-    this.subjects[index] = { subjectName: newSubjectName, subjectCode: newSubjectCode };
-
-    // Update localStorage after editing a teacher
-    this.updateLocalStorage();
-  }
-}
-
-deleteSubject(index: number) {
-  if (confirm('Are you sure you want to delete this subject?')) {
-    this.subjects.splice(index, 1);
-
-    // Update localStorage after deleting a student
-    this.updateLocalStorage();
-  }
-}
-
-private updateLocalStorage() {
-  localStorage.setItem('subjects', JSON.stringify(this.subjects));
-}
+nextRecordId: number = 1;
 
 }

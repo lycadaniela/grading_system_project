@@ -1,74 +1,161 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     
-<div id="main">
-    <div class="head">
-        <div class="col-div-6">
-            <span style="font-size:30px;cursor:pointer; color: white;" class="nav"  >Class Grading System</span>
-        </div>
-    
-    <div class="col-div-6">
-        <div class="profile">
-            <img src="assets/images/admin.png" class="pro-img" />
-            <p>Admin <span>BSIT 3-1</span></p>
-        </div>
-    </div>
-
-        <div class="clearfix"></div>
-    </div>
-</div>
-
 <div class="container mt-4">
-    <h1 class="text-center">Class Dashboard</h1>
+  <h1 class="text-center">Class Dashboard</h1>
 
-    <div *ngIf="!showClassRecords">
-        <h2>Add Class</h2>
-        <form [formGroup]="addForm" (ngSubmit)="addClass()">
-          <div class="form-group">
-            <label for="className">Class Name:</label>
-            <input type="text" class="form-control" id="className" formControlName="className">
+  <!-- Records Section -->
+  <div *ngIf="currentSection === 'records'">
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-secondary return-btn" (click)="toggleSection('add-form')">Add Class</button>
+
+      <!-- Search Bar -->
+      <div class="form-group d-flex justify-content-end">
+        <div class="input-group">
+          <input type="text" class="form-control" id="searchTerm" [(ngModel)]="searchTerm" placeholder="Enter search term" style="max-width: 200px;">
+          <div class="input-group-append">
+            <button class="btn btn-primary ml-2" (click)="searchRecords()">Search</button>
+            <button class="btn btn-secondary ml-2" (click)="resetSearch()">Reset</button>
           </div>
-
-          <div class="form-group">
-            <label for="yearLevel">Year Level:</label>
-            <input type="text" class="form-control" id="yearLevel" formControlName="yearLevel">
-          </div>
-          <button type="submit" class="btn btn-primary">Add</button>
-          <button type="button" class="btn btn-secondary record-btn" (click)="toggleSections()">Records</button>
-        </form>
-      </div>
-
-    <div *ngIf="showClassRecords">
-        <div class="mb-3">
-            <div class="d-flex justify-content-between">
-                <button class="btn btn-secondary return-btn btn-sm" (click)="toggleSections()" style="height: 38px;">Add New</button>
-                <div class="d-flex">
-                    <input type="text" class="form-control mr-2" id="search" [(ngModel)]="searchTerm" placeholder="Enter class name" style="width: 150px;">
-                    <button class="btn btn-primary btn-sm" type="button" (click)="searchClasses()" style="height: 38px;">Search</button>
-                    <button class="btn btn-secondary return-btn" (click)="resetSearch()">Reset Table</button>
-                </div>
-            </div>
         </div>
-
-        <h2>Class Records</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Class Name</th>
-                    <th>Year Level</th>
-                    <th class="text-center" colspan="3">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let class of classes; let i = index">
-                    <td>{{ class.className }}</td>  
-                    <td>{{ class.yearLevel }}</td>
-                    <td colspan="3" class="text-center">
-                        <button class="btn btn-info btn-sm" (click)="viewClass(i)">View</button>
-                        <button class="btn btn-warning btn-sm edit-btn" (click)="editClass(i)">Edit</button>
-                        <button class="btn btn-danger btn-sm delete-btn" (click)="deleteClass(i)">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+      </div>
     </div>
+
+      <h2>All Class Record</h2>
+
+      
+
+      <table class="table table-striped">
+          <thead>
+              <tr>
+                  <th>Department</th>
+                  <th>Year Level</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+          <tbody id="subjectList">
+              <!-- Loop through recordsData and display rows -->
+              <tr *ngFor="let item of filteredRecordsData; let i = index">
+                <td>{{ item.department }}</td>
+                <td>{{ item.yearLevel }}</td>
+                <td>
+                    <button class="btn btn-info" (click)="viewRecord(item)">View</button>
+                    <button class="btn btn-warning ml-2" (click)="editRecord(item)">Edit</button>
+                    <button class="btn btn-danger ml-2" (click)="deleteRecord(item)">Delete</button>
+                </td>
+            </tr>
+            
+          </tbody>
+      </table>
+  </div>
+
+                    
+
+  
+  <!-- Add Form Section -->
+  <div *ngIf="currentSection === 'add-form'">
+    <button class="btn btn-secondary" (click)="toggleSection('records')">Back to Records</button>
+    <br><br>
+    <h2>Add Class</h2>
+    <form id="addForm" (submit)="submitForm()">
+        <div class="form-group">
+            <label for="department">Department:</label>
+            <select [(ngModel)]="department" name="department" class="form-control" id="department" required>
+                <option value="Bachelor of Science in Computer Engineering">Bachelor of Science in Computer Engineering</option>
+                <option value="Bachelor of Science in Electronics and Communications Engineering">Bachelor of Science in Electronics and Communications Engineering</option>
+                <option value="Bachelor of Science in Computer Science">Bachelor of Science in Computer Science</option>
+                <option value="Bachelor of Science in Information Technology">Bachelor of Science in Information Technology</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="yearLevel">Year Level:</label>
+            <select [(ngModel)]="yearLevel" name="yearLevel" class="form-control" id="yearLevel" required>
+                <option value="Year 1">Year 1</option>
+                <option value="Year 2">Year 2</option>
+                <option value="Year 3">Year 3</option>
+                <option value="Year 4">Year 4</option>
+                <option value="Year 5">Year 5</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="block">Block:</label>
+            <select [(ngModel)]="block" name="block" class="form-control" id="block" required>
+                <option value="Block 1">Block 1</option>
+                <option value="Block 2">Block 2</option>
+                <option value="Block 3">Block 3</option>
+                <option value="Block 4">Block 4</option>
+                <option value="Block 5">Block 5</option>
+                <option value="Block 6">Block 6</option>
+                <option value="Block 7">Block 7</option>
+                <option value="Block 8">Block 8</option>
+                <option value="Block 9">Block 9</option>
+                <option value="Block 10">Block 10</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
 </div>
+
+
+
+  <!-- View Form Section -->
+  <div *ngIf="currentSection === 'view-form' && selectedRecord">
+  <button class="btn btn-secondary" (click)="toggleSection('records')">Back to Records</button>
+  <br><br>
+  <h2>View Class</h2>
+  <br><br>
+  <div>
+    <strong>Department:</strong> {{ selectedRecord?.department }}<br>
+    <strong>Year Level:</strong> {{ selectedRecord?.yearLevel }}<br>
+    <strong>Block:</strong> {{ selectedRecord?.block }}<br>
+    <strong>List of Students:</strong> {{ selectedRecord?.listStudent }}<br><br>
+  </div>
+</div>
+  
+
+
+
+  <!-- Edit Form Section -->
+  <div *ngIf="currentSection === 'edit-form'">
+    <button class="btn btn-secondary" (click)="toggleSection('records')">Back to Records</button>
+    <br><br>
+    <h2>Edit Class</h2>
+    <form id="editForm" (submit)="updateRecord()">
+      <div class="form-group">
+        <label for="editDepartment">Department:</label>
+        <select [(ngModel)]="editingRecord.department" name="editDepartment" type="text" class="form-control" id="editDepartment" required>
+                <option value="Bachelor of Science in Computer Engineering">Bachelor of Science in Computer Engineering</option>
+                <option value="Bachelor of Science in Electronics and Communications Engineering">Bachelor of Science in Electronics and Communications Engineering</option>
+                <option value="Bachelor of Science in Computer Science">Bachelor of Science in Computer Science</option>
+                <option value="Bachelor of Science in Information Technology">Bachelor of Science in Information Technology</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="editYearLevel">Year Level:</label>
+        <select [(ngModel)]="editingRecord.yearLevel" name="editYearLevel" type="text" class="form-control" id="editYearLevel" required>
+                <option value="Year 1">Year 1</option>
+                <option value="Year 2">Year 2</option>
+                <option value="Year 3">Year 3</option>
+                <option value="Year 4">Year 4</option>
+                <option value="Year 5">Year 5</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="editBlock">Block:</label>
+        <select [(ngModel)]="editingRecord.block" name="editBlock" type="text" class="form-control" id="editBlock" required>
+                <option value="Block 1">Block 1</option>
+                <option value="Block 2">Block 2</option>
+                <option value="Block 3">Block 3</option>
+                <option value="Block 4">Block 4</option>
+                <option value="Block 5">Block 5</option>
+                <option value="Block 6">Block 6</option>
+                <option value="Block 7">Block 7</option>
+                <option value="Block 8">Block 8</option>
+                <option value="Block 9">Block 9</option>
+                <option value="Block 10">Block 10</option>
+        </select>
+      </div>
+      <!-- Add more fields as needed -->
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </div>
+  

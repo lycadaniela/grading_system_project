@@ -1,76 +1,149 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
-<div id="main">
-    <div class="head">
-        <div class="col-div-6">
-            <span style="font-size:30px;cursor:pointer; color: white;" class="nav"  >Teachers Grading System</span>
-        </div>
     
-    <div class="col-div-6">
-        <div class="profile">
-            <img src="assets/images/admin.png" class="pro-img" />
-            <p>Admin <span>BSIT 3-1</span></p>
-        </div>
-    </div>
-
-        <div class="clearfix"></div>
-    </div>
-</div>
-
 <div class="container mt-4">
-    <h1 class="text-center">Teacher Dashboard</h1>
+  <h1 class="text-center">Teacher Dashboard</h1>
 
-    <!-- Add Student Form -->
-    <div *ngIf="!showTeacherRecords">
-        <h2>Add Teacher</h2>
-        <form [formGroup]="addForm" (ngSubmit)="addTeacher()">
-          <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" id="name" formControlName="name">
+  <!-- Records Section -->
+  <div *ngIf="currentSection === 'records'">
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-secondary return-btn" (click)="toggleSection('add-form')">Add Teacher</button>
+
+      <!-- Search Bar -->
+      <div class="form-group d-flex justify-content-end">
+        <div class="input-group">
+          <input type="text" class="form-control" id="searchTerm" [(ngModel)]="searchTerm" placeholder="Enter search term" style="max-width: 200px;">
+          <div class="input-group-append">
+            <button class="btn btn-primary ml-2" (click)="searchRecords()">Search</button>
+            <button class="btn btn-secondary ml-2" (click)="resetSearch()">Reset</button>
           </div>
-          <div class="form-group">
-            <label for="subject">Subject:</label>
-            <input type="text" class="form-control" id="subject" formControlName="subject">
-          </div>
-          <button type="submit" class="btn btn-primary">Add</button>
-          <button type="button" class="btn btn-secondary record-btn" (click)="toggleSections()">Records</button>
-        </form>
+        </div>
       </div>
-
-    <!-- Student Records -->
-    <div *ngIf="showTeacherRecords">
-        <div *ngIf="showTeacherRecords">
-            <div class="mb-3">
-              <div class="d-flex justify-content-between">
-                <button class="btn btn-secondary return-btn btn-sm" (click)="toggleSections()" style="height: 38px;">Add New</button>
-                <div class="d-flex">
-                  <input type="text" class="form-control mr-2" id="search" [(ngModel)]="searchTerm" placeholder="Enter teacher name" style="width: 200px;">
-                  <button class="btn btn-primary btn-sm" type="button" (click)="searchTeachers()" style="height: 38px;">Search</button>
-                  <button class="btn btn-secondary return-btn" (click)="resetSearch()">Reset Table</button>
-                </div>
-              </div>
-            </div>
-
-        <h2>Teacher Records</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Subject</th>
-                    <th colspan="3" class="text-center">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let teacher of teachers; let i = index">
-                    <td>{{ teacher.name }}</td>
-                    <td>{{ teacher.subject }}</td>
-                    <td colspan="3" class="text-center">
-                        <button class="btn btn-info btn-sm" (click)="viewTeacher(i)">View</button>
-                        <button class="btn btn-warning btn-sm edit-btn" (click)="editTeacher(i)">Edit</button>
-                        <button class="btn btn-danger btn-sm delete-btn" (click)="deleteTeacher(i)">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
     </div>
+
+      <h2>All Teacher Record</h2>
+
+      <table class="table table-striped">
+          <thead>
+              <tr>
+                  <th>Teacher Name</th>
+                  <th>Employee ID</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+          <tbody id="subjectList">
+              <!-- Loop through recordsData and display rows -->
+              <tr *ngFor="let item of filteredRecordsData; let i = index">
+                <td>{{ item.teacher }}</td>
+                <td>{{ item.employeeID }}</td>
+                <td>
+                    <button class="btn btn-info" (click)="viewRecord(item)">View</button>
+                    <button class="btn btn-warning ml-2" (click)="editRecord(item)">Edit</button>
+                    <button class="btn btn-danger ml-2" (click)="deleteRecord(item)">Delete</button>
+                </td>
+            </tr>
+            
+          </tbody>
+      </table>
+  </div>
+
+                    
+
+  
+  <!-- Add Form Section -->
+  <div *ngIf="currentSection === 'add-form'">
+    <button class="btn btn-secondary" (click)="toggleSection('records')">Back to Records</button>
+    <br><br>
+    <h2>Add Teacher</h2>
+    <form id="addForm" (submit)="submitForm()">
+          <div class="form-group">
+              <label for="teacher">Teacher Name:</label>
+              <input [(ngModel)]="teacher" name="teacher" type="text" class="form-control" id="teacher" required>
+          </div>
+          <div class="form-group">
+              <label for="employeeID">Employee ID:</label>
+              <input [(ngModel)]="employeeID" name="employeeID" type="text" class="form-control" id="employeeID" required>
+          </div>
+          <div class="form-group">
+              <label for="contact">Contact Information:</label>
+              <input [(ngModel)]="contact" name="contact" type="text" class="form-control" id="contact" required>
+          </div>
+          <div class="form-group">
+              <label for="courses">Courses:</label>
+              <input [(ngModel)]="courses" name="courses" type="text" class="form-control" id="courses" required>
+          </div>
+          <div class="form-group">
+              <label for="classes">Classes:</label>
+              <input [(ngModel)]="classes" name="classes" type="text" class="form-control" id="classes" required>
+          </div>
+          <div class="form-group">
+              <label for="username">Username:</label>
+              <input [(ngModel)]="username" name="username" type="text" class="form-control" id="username" required>
+          </div>
+          <div class="form-group">
+              <label for="password">Password:</label>
+              <input [(ngModel)]="password" name="password" type="text" class="form-control" id="password" required>
+          </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
 </div>
+
+
+
+  <!-- View Form Section -->
+  <div *ngIf="currentSection === 'view-form' && selectedRecord">
+  <button class="btn btn-secondary" (click)="toggleSection('records')">Back to Records</button>
+  <br><br>
+  <h2>View Teacher</h2>
+  <br><br>
+  <div>
+    <strong>Teacher Name:</strong> {{ selectedRecord?.teacher }}<br>
+    <strong>Employee ID:</strong> {{ selectedRecord?.employeeID }}<br>
+    <strong>Contact Information:</strong> {{ selectedRecord?.contact }}<br>
+    <strong>Courses:</strong> {{ selectedRecord?.courses }}<br>
+    <strong>Classes:</strong> {{ selectedRecord?.classes }}<br>
+    <strong>Username:</strong> {{ selectedRecord?.username }}<br>
+    <strong>Password:</strong> {{ selectedRecord?.password }}<br><br>
+  </div>
+</div>
+  
+
+
+
+  <!-- Edit Form Section -->
+  <div *ngIf="currentSection === 'edit-form'">
+    <button class="btn btn-secondary" (click)="toggleSection('records')">Back to Records</button>
+    <br><br>
+    <h2>Edit Class</h2>
+    <form id="editForm" (submit)="updateRecord()">
+      <div class="form-group">
+        <label for="editTeacher">Teacher Name:</label>
+        <input [(ngModel)]="editingRecord.teacher" name="editTeacher" type="text" class="form-control" id="editTeacher" required>
+    </div>
+    <div class="form-group">
+        <label for="editEmployeeID">ID No.:</label>
+        <input [(ngModel)]="editingRecord.employeeID" name="editEmployeeID" type="text" class="form-control" id="editEmployeeID" required>
+    </div>
+    <div class="form-group">
+        <label for="editContact">Contact Information:</label>
+        <input [(ngModel)]="editingRecord.contact" name="editContact" type="text" class="form-control" id="editContact" required>
+    </div>
+    <div class="form-group">
+        <label for="editCourses">Courses:</label>
+        <input [(ngModel)]="editingRecord.courses" name="editCourses" type="text" class="form-control" id="editCourses" required>
+    </div>
+    <div class="form-group">
+        <label for="editClasses">Courses:</label>
+        <input [(ngModel)]="editingRecord.classes" name="editClasses" type="text" class="form-control" id="editClasses" required>
+    </div>
+    <div class="form-group">
+        <label for="editUsername">Username:</label>
+        <input [(ngModel)]="editingRecord.username" name="editUsername" type="text" class="form-control" id="editUsername" required>
+    </div>
+    <div class="form-group">
+        <label for="editPassword">Password:</label>
+        <input [(ngModel)]="editingRecord.password" name="editPassword" type="text" class="form-control" id="editPassword" required>
+    </div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </div>
+  
