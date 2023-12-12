@@ -19,10 +19,10 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.userType === 'admin') {
       this.router.navigate(['/admin-dashboard']);
-    } else if (this.userType === 'student') {
-      this.router.navigate(['/studentregistration']);
     } else if (this.userType === 'teacher') {
-      this.router.navigate(['/teacherviewstudents']);
+      this.router.navigate(['/teacher-dashboard']);
+    } else if (this.userType === 'student') {
+      this.router.navigate(['/student-dashboard']);
     }
   }
 

@@ -1,0 +1,12 @@
+<br><br><br>
+<div class="dash-card">
+    <app-card *ngFor="let item of stuData"
+          [title]="item.title"
+          [value]="item.value"
+          [icon]="item.icon"
+          [design]="item.design"
+></app-card>   
+</div>
+<br>
+
+<app-table></app-table> 

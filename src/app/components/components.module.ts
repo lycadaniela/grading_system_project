@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from './card/card.component';
 import { TableComponent } from './table/table.component';
-import { CircleComponent } from './circle/circle.component';
+import { ScreenComponent } from './screen/screen.component';
+import { StuNavbarComponent } from './stu-navbar/stu-navbar.component';
+import { StuScreenComponent } from './stu-screen/stu-screen.component';
 
 
 
@@ -10,7 +12,6 @@ import { CircleComponent } from './circle/circle.component';
   declarations: [
   CardComponent,
   TableComponent,
-  CircleComponent
 
   ],
   imports: [
@@ -20,7 +21,6 @@ import { CircleComponent } from './circle/circle.component';
   exports: [
     CardComponent,
     TableComponent,
-    CircleComponent
 
   ]
 })

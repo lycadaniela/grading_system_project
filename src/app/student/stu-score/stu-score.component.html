@@ -1,0 +1,15 @@
+<br><br><br>
+
+<h1>Scores</h1>
+
+
+<br><br>
+
+
+<div class="dash-card">
+    <app-card *ngFor="let item of scoreData"
+    [title]="item.title"
+    [value]="item.value"
+    [design]="item.design"
+    ></app-card>
+</div>

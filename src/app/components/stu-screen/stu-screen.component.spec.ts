@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CircleComponent } from './circle.component';
+import { StuScreenComponent } from './stu-screen.component';
 
-describe('CircleComponent', () => {
-  let component: CircleComponent;
-  let fixture: ComponentFixture<CircleComponent>;
+describe('StuScreenComponent', () => {
+  let component: StuScreenComponent;
+  let fixture: ComponentFixture<StuScreenComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CircleComponent ]
+      declarations: [ StuScreenComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CircleComponent);
+    fixture = TestBed.createComponent(StuScreenComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
