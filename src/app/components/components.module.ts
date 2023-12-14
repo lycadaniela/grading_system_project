@@ -2,9 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from './card/card.component';
 import { TableComponent } from './table/table.component';
-import { ScreenComponent } from './screen/screen.component';
-import { StuNavbarComponent } from './stu-navbar/stu-navbar.component';
-import { StuScreenComponent } from './stu-screen/stu-screen.component';
+import { TeaNavbarComponent } from './tea-navbar/tea-navbar.component';
+import { TeaScreenComponent } from './tea-screen/tea-screen.component';
 
 
 

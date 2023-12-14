@@ -1,0 +1,75 @@
+body {
+    /* Set background color and padding */
+    background-color: #272c4a;
+    padding-top: 50px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    background-color: #d0cfcf;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(223, 221, 221, 0.1);
+    
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+    color: black;
+   
+  }
+  
+  .return-btn {
+    margin-bottom: 20px;
+    
+  }
+  
+  .record-btn, .edit-btn, .delete-btn{
+    margin-left: 25px;
+  }
+  
+  #main {
+    transition: margin-left .5s;
+    padding: 16px;
+    margin-left: 300px;
+    
+  }
+  .head{
+    padding:20px;
+    
+  }
+  .col-div-6{
+    width: 50%;
+    float: left;
+    
+  }
+  .profile{
+    float: right;
+    width: 160px;
+    text-decoration: underline;
+    color: white;
+  }
+  .pro-img{
+    float: left;
+    width: 40px;
+    margin-top: 5px;
+  }
+  .profile p{
+    color: white;
+    font-weight: 500;
+    margin-left: 55px;
+    margin-top: 10px;
+    font-size: 13.5px;
+  }
+  .profile p span{
+    font-weight: 400;
+      font-size: 12px;
+      display: block;
+      color: #8e8b8b;
+  }
+  
+  .box p span{
+    font-size: 20px;
+    font-weight: 400;
+    color: #818181;
+  }

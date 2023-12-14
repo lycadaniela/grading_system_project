@@ -6,7 +6,34 @@ import { Routes, RouterModule } from '@angular/router';
 const routes : Routes = [
   {
     path:"",
-    component: TeacherComponent
+    component: TeacherComponent,
+
+    children:[
+      {
+        path:"", redirectTo: "stu-dashboard", pathMatch:"prefix",
+        
+      },
+
+      {
+        path:"teacher-dashboard",
+        loadChildren:()=>import('./tea-dashboard/tea-dashboard.module').then(mod=>mod.TeaDashboardModule)
+      },
+
+      {
+        path:"teacher-class",
+        loadChildren:()=>import('./tea-class/tea-class.module').then(mod=>mod.TeaClassModule)
+      },
+
+      {
+        path:"teacher-student",
+        loadChildren:()=>import('./tea-student/tea-student.module').then(mod=>mod.TeaStudentModule)
+      },
+
+      {
+        path:"teacher-grade",
+        loadChildren:()=>import('./tea-grade/tea-grade.module').then(mod=>mod.TeaGradeModule)
+      },
+    ]
   }
 ]
 
