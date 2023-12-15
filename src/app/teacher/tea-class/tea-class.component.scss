@@ -1,70 +1,145 @@
 p {
-    font-size: 40px;
-    font-weight: bold;
-    margin-bottom: 50px;
-    color: #1784c7;
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 50px;
+  color: #1784c7;
 }
 
 .dash-card {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+display: flex;
+flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
+justify-content: space-between; /* Distribute space between items */
+}
+
+.item {
+width: 100%; /* Set the width to 100% to make it adjust dynamically */
+box-sizing: border-box;
+padding: 10px;
+margin-bottom: 20px;
+border: 1px solid #ddd;
+}
+
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+  margin-left: 300px;
+  
+}
+.head{
+  padding:20px;
+  
+}
+.col-div-6{
+  width: 50%;
+  float: left;
+  
+}
+.profile{
+  float: right;
+  width: 160px;
+  text-decoration: underline;
+  color: white;
+}
+.pro-img{
+  float: left;
+  width: 40px;
+  margin-top: 5px;
+}
+.profile p{
+  color: white;
+  font-weight: 500;
+  margin-left: 55px;
+  margin-top: 10px;
+  font-size: 13.5px;
+}
+.profile p span{
+  font-weight: 400;
+    font-size: 12px;
+    display: block;
+    color: #8e8b8b;
+}
+
+.box p span{
+  font-size: 20px;
+  font-weight: 400;
+  color: #818181;
+}
+
+.content-box {
+  padding: 20px;
+  background: #272c4a;
+  margin: 16px;
+}
+
+.content-box p {
+  margin: 0px;
+  font-size: 20px;
+  color: #f9f9f9;
+}
+
+.content-box p span {
+  float: right;
+  background-color: #ddd;
+  padding: 3px 10px;
+  font-size: 15px;
+}
+
+table {
+  font-family: arial, sans-serif;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td, th {
+  text-align: left;
+  padding: 15px;
+  color: #ddd;
+  border-bottom: 1px solid #81818140;
+}
+
+@media (max-width: 768px) {
+  table {
+      width: 100%;
   }
+}
 
-  .item {
-    width: 50%;
-    box-sizing: border-box;
-    padding: 10px;
-    border: 1px solid #ddd;
+.card {
+  box-sizing: border-box;
+  width: 80vw; /* Set the width to 100% to make it adjust dynamically */
+  height: 120px;
+  background-color: #272c4a;
+  margin: 16px;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.cardstyle p {
+  font-size: 35px;
+  color: white;
+  font-weight: bold;
+  line-height: 30px;
+  padding-left: 10px;
+  margin-top: 20px;
+  display: inline-block;
+}
+
+.cardstyle p span {
+  font-size: 20px;
+  font-weight: 400;
+  color: #818181;
+}
+
+.cardstyle-icon {
+  font-size: 40px !important;
+  float: right;
+  margin-top: 35px !important;
+  color: #f16666;
+  padding-right: 10px;
+}
+
+@media screen and (max-width: 600px) {
+  .card {
+      width: 100%; /* Adjust as needed for smaller screens */
   }
-
-  h1 {
-    text-align: center;
-    color: white;
-    }
-
-    #main {
-      transition: margin-left .5s;
-      padding: 16px;
-      margin-left: 300px;
-      
-    }
-    .head{
-      padding:20px;
-      
-    }
-    .col-div-6{
-      width: 50%;
-      float: left;
-      
-    }
-    .profile{
-      float: right;
-      width: 160px;
-      text-decoration: underline;
-      color: white;
-    }
-    .pro-img{
-      float: left;
-      width: 40px;
-      margin-top: 5px;
-    }
-    .profile p{
-      color: white;
-      font-weight: 500;
-      margin-left: 55px;
-      margin-top: 10px;
-      font-size: 13.5px;
-    }
-    .profile p span{
-      font-weight: 400;
-        font-size: 12px;
-        display: block;
-        color: #8e8b8b;
-    }
-    
-    .box p span{
-      font-size: 20px;
-      font-weight: 400;
-      color: #818181;
-    }
+}

@@ -1,15 +1,26 @@
 <br><br><br>
 
-<h1>Class</h1>
 
-
-<br><br>
-
-
-<div class="dash-card">
-    <app-card *ngFor="let item of classData"
-    [title]="item.title"
-    [value]="item.value"
-    [design]="item.design"
-    ></app-card>
-</div>
+<div class="content-box" *ngIf="classData.length > 0">
+    <p>Classes</p>
+    <br>
+    <table>
+      <thead>
+        <tr>
+          <th>Department</th>
+          <th>Year Level</th>
+          <th>Block</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let class of classData">
+          <td>{{ class.department }}</td>
+          <td>{{ class.year_level }}</td>
+          <td>{{ class.block }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="classData.length === 0">
+    <p>No student data available.</p>
+  </div>

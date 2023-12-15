@@ -1,12 +1,57 @@
 <br><br><br>
+
 <div class="dash-card">
-    <app-card *ngFor="let item of stuData"
-          [title]="item.title"
-          [value]="item.value"
-          [icon]="item.icon"
-          [design]="item.design"
-></app-card>   
+  <div class="card" style="width: 17rem;">
+    <div class="cardstyle">
+        <p>{{ teacherCount }} <br> <span>Teacher</span></p>
+        <i class="fa fa-id-badge icons cardstyle-icon "></i>
+    </div>
 </div>
+
+<div class="card" style="width: 17rem;">
+    <div class="cardstyle">
+        <p>{{ studentCount }} <br> <span>Student</span></p>
+        <i class="fa fa-id-card icons cardstyle-icon "></i>
+    </div>
+</div>
+
+  <div class="card" style="width: 17rem;">
+    <div class="cardstyle">
+        <p>{{ classCount }} <br> <span>Class</span></p>
+        <i class="fa fa-th icons cardstyle-icon "></i>
+    </div>
+</div>
+
+  <div class="card" style="width: 17rem;">
+    <div class="cardstyle">
+        <p>{{ courseCount }} <br> <span>Course</span></p>
+        <i class="fa fa-book icons cardstyle-icon "></i>
+    </div>
+</div>
+
+</div>
+
+
 <br>
 
-<app-table></app-table> 
+<div class="content-box" *ngIf="studentData.length > 0">
+    <p>List of Students Enrolled</p>
+    <br>
+    <table>
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>ID No</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of studentData">
+          <td>{{ student.student_name }}</td>
+          <td>{{ student.student_number }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="studentData.length === 0">
+    <p>No student data available.</p>
+  </div>
