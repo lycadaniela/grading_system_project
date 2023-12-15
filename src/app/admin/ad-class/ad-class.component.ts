@@ -1,5 +1,7 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ClassService } from 'src/app/services/class.service';
 import { DataService } from 'src/shared_data/data.service';
 
 @Component({
@@ -9,9 +11,11 @@ import { DataService } from 'src/shared_data/data.service';
 })
 export class AdClassComponent {
 
+  apiUrl = 'http://localhost:3000/api/classes';
+
   currentSection: string = 'records';
   recordsData: any[] = [];
-  selectedRecord: any = { department: '', yearLevel: '', block: '', listStudent: '' };
+  selectedRecord: any = { department: '', yearLevel: '', block: ''};
   editingRecord: any = null;
   
 
@@ -19,102 +23,132 @@ export class AdClassComponent {
   department: string = '';
   yearLevel: string = '';
   block: string = '';
-  listStudent: string = '';
+  
+  searchTerm: string = '';
+  filteredRecordsData: any[] = [];
 
-  constructor(private cdr: ChangeDetectorRef, private ngZone: NgZone) {
-    // Initialize recordsData with sample data
-    this.recordsData = [
-      // Add more data as needed
-    ];
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone,
+    private http: HttpClient,
+    private classService: ClassService
+  ) {}
+
+  ngOnInit() {
+    this.loadRecords();
   }
-  
 
-  toggleSection(section: string, record?: any) {
-    console.log('Toggling section:', section, 'Record:', record);
-  
-    this.ngZone.run(() => {
-      this.currentSection = section;
-  
-      if (section !== 'view-form') {
-        this.selectedRecord = null;
-      }
-  
-      this.cdr.detectChanges();
+  loadRecords() {
+    this.classService.getAllClass().subscribe((data) => {
+      this.recordsData = data;
+      this.filteredRecordsData = [...this.recordsData];
     });
   }
 
   submitForm() {
     const formData = {
-      id: this.nextRecordId++,
-      department: this.department,
-      yearLevel: this.yearLevel,
-      block: this.block,
-      listStudent: this.listStudent,
+      "department": this.department,
+      "year_level": this.yearLevel,  // Change to 'year_level'
+      "block": this.block,
     };
   
-    this.recordsData.push(formData);
-    this.filteredRecordsData = [...this.recordsData];
+    // Send a POST request to the API to add a new class
+    this.classService.createClass(formData).subscribe(
+      (response: any) => {
+        // Assuming the server returns the newly created record
+        const newRecord = response;
   
-    this.clearForm();
-    this.toggleSection('records');
+        // Update the local data and reset the form
+        this.recordsData.push(newRecord);
+        this.filteredRecordsData = [...this.recordsData];
+        this.clearForm();
+  
+        // Toggle back to the records section
+        this.toggleSection('records');
+      },
+      (error) => {
+        console.error('POST Error:', error);
+  
+        if (error instanceof HttpErrorResponse && error.status === 400) {
+          console.error('Validation Errors:', error.error.validationErrors);
+          // Handle validation errors, e.g., display an error message to the user
+        } else {
+          // Handle other types of errors
+        }
+      }
+    );
   }
 
   clearForm() {
     this.department = '';
     this.yearLevel = '';
     this.block = '';
-    this.listStudent = '';
   }
 
   viewRecord(record: any) {
-    this.selectedRecord = record;
-    this.toggleSection('view-form');
+    // Fetch the detailed record from the server using CourseService
+    this.classService.getClassById(record.class_id).subscribe(
+      (detailedRecord) => {
+        this.selectedRecord = detailedRecord;
+        this.toggleSection('view-form');
+      },
+      (error) => {
+        console.error('Error fetching detailed record:', error);
+        // Handle error, e.g., display an error message to the user
+      }
+    );
   }
+
 
   deleteRecord(record: any) {
     const index = this.recordsData.indexOf(record);
+  
     if (index !== -1) {
-      this.recordsData.splice(index, 1);
-  
-      // Update filteredRecordsData after deletion
-      this.filteredRecordsData = this.recordsData.filter(item =>
-        item.department.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        item.yearLevel.toLowerCase().includes(this.searchTerm.toLowerCase())
+      // Delete from the server
+      this.classService.deleteClass(record.class_id).subscribe(
+        () => {
+          // If deletion on the server is successful, delete from the client
+          this.recordsData.splice(index, 1);
+          this.filteredRecordsData = [...this.recordsData];
+          console.log('Data deleted:', record);
+        },
+        (error) => {
+          console.error('Error deleting record on the server:', error);
+        }
       );
-  
-      console.log('Data deleted:', record);
     } else {
       console.error('Record not found in recordsData.');
     }
   }
 
   editRecord(record: any) {
-    console.log('Editing Record:', record);
-    // Set editingRecord to a copy of the selected record
-    this.editingRecord = { ...record, id: record.id }; // Ensure 'id' is set
-    console.log('Editing Record (after assignment):', this.editingRecord);
+    this.editingRecord = { ...record, id: record.class_id };
     this.toggleSection('edit-form');
   }
 
   updateRecord() {
-    // Find the index of the record to update
-    const index = this.recordsData.findIndex(record => record.id === this.editingRecord.id);
-  
+    const index = this.recordsData.findIndex(record => record.class_id === this.editingRecord.id);
+    
     if (index !== -1) {
-      // Update the record
-      this.recordsData[index] = { ...this.editingRecord };
+      const updatedData = {
+        department: this.editingRecord.department,
+        year_level: this.editingRecord.year_level,
+        block: this.editingRecord.block,
+      };
   
-      // Update filteredRecordsData as well
-      this.searchRecords();
-  
-      console.log('Record updated:', this.recordsData[index]);
-      console.log('Updated recordsData:', this.recordsData);
-      console.log('Filtered recordsData:', this.filteredRecordsData);
-  
-      this.clearEditForm();
-      this.toggleSection('records');
+      this.classService.updateClass(this.editingRecord.id, updatedData).subscribe(
+        () => {
+          console.log('Record updated successfully!');
+          this.loadRecords();
+          this.clearEditForm();
+          this.toggleSection('records');
+        },
+        (error) => {
+          console.error('Error updating record:', error);
+        }
+      );
     } else {
-      console.error('Record not found in recordsData.');
+      console.error('Record not found in recordsData. Editing Record ID:', this.editingRecord.id);
     }
   }
 
@@ -122,28 +156,38 @@ export class AdClassComponent {
     this.editingRecord = null;
   }
 
-  ngOnInit() {
-    console.log('Initial recordsData:', this.recordsData);
+  searchRecords() {
+    if (this.searchTerm.trim() === '') {
+      this.loadRecords(); // Reload all records if the search term is empty
+    } else {
+      this.classService.searchClass(this.searchTerm).subscribe(
+        (data) => {
+          this.filteredRecordsData = data;
+        },
+        (error) => {
+          console.error('Error searching records:', error);
+          // Handle error, e.g., display an error message to the user
+        }
+      );
+    }
   }
 
-  // Add the searchTerm property at the top of your component
-searchTerm: string = '';
-filteredRecordsData: any[] = [];
+  resetSearch() {
+    this.searchTerm = '';
+    this.searchRecords();
+  }
 
-searchRecords() {
-  // Perform the search based on the searchTerm
-  this.filteredRecordsData = this.recordsData.filter(item =>
-      item.department.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      item.yearLevel.toLowerCase().includes(this.searchTerm.toLowerCase())
-  );
-}
+  toggleSection(section: string) {
+    this.ngZone.run(() => {
+      this.currentSection = section;
 
-resetSearch() {
-  this.searchTerm = ''; // Reset the search term
-  this.searchRecords(); // Call the searchRecords method to reset the table
-}
+      if (section !== 'view-form') {
+        this.selectedRecord = null;
+      }
 
-nextRecordId: number = 1;
+      this.cdr.detectChanges();
+    });
+  };
 
 }
 

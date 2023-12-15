@@ -32,13 +32,13 @@
           </thead>
           <tbody id="subjectList">
               <!-- Loop through recordsData and display rows -->
-              <tr *ngFor="let item of filteredRecordsData; let i = index">
-                <td>{{ item.teacher }}</td>
-                <td>{{ item.employeeID }}</td>
+              <tr *ngFor="let record of filteredRecordsData">
+                <td>{{ record.teacher_name }}</td>
+                <td>{{ record.employee_number }}</td>
                 <td>
-                    <button class="btn btn-info" (click)="viewRecord(item)">View</button>
-                    <button class="btn btn-warning ml-2" (click)="editRecord(item)">Edit</button>
-                    <button class="btn btn-danger ml-2" (click)="deleteRecord(item)">Delete</button>
+                    <button class="btn btn-info" (click)="viewRecord(record)">View</button>
+                    <button class="btn btn-warning ml-2" (click)="editRecord(record)">Edit</button>
+                    <button class="btn btn-danger ml-2" (click)="deleteRecord(record)">Delete</button>
                 </td>
             </tr>
             
@@ -57,15 +57,15 @@
     <form id="addForm" (submit)="submitForm()">
           <div class="form-group">
               <label for="teacher">Teacher Name:</label>
-              <input [(ngModel)]="teacher" name="teacher" type="text" class="form-control" id="teacher" required>
+              <input [(ngModel)]="teacher_name" name="teacher" type="text" class="form-control" id="teacher" required>
           </div>
           <div class="form-group">
               <label for="employeeID">Employee ID:</label>
-              <input [(ngModel)]="employeeID" name="employeeID" type="text" class="form-control" id="employeeID" required>
+              <input [(ngModel)]="employee_number" name="employeeID" type="text" class="form-control" id="employeeID" required>
           </div>
           <div class="form-group">
               <label for="contact">Contact Information:</label>
-              <input [(ngModel)]="contact" name="contact" type="text" class="form-control" id="contact" required>
+              <input [(ngModel)]="email_address" name="contact" type="text" class="form-control" id="contact" required>
           </div>
           <div class="form-group">
               <label for="courses">Courses:</label>
@@ -96,9 +96,9 @@
   <h2>View Teacher</h2>
   <br><br>
   <div>
-    <strong>Teacher Name:</strong> {{ selectedRecord?.teacher }}<br>
-    <strong>Employee ID:</strong> {{ selectedRecord?.employeeID }}<br>
-    <strong>Contact Information:</strong> {{ selectedRecord?.contact }}<br>
+    <strong>Teacher Name:</strong> {{ selectedRecord?.teacher_name }}<br>
+    <strong>Employee ID:</strong> {{ selectedRecord?.employee_number }}<br>
+    <strong>Contact Information:</strong> {{ selectedRecord?.email_address }}<br>
     <strong>Courses:</strong> {{ selectedRecord?.courses }}<br>
     <strong>Classes:</strong> {{ selectedRecord?.classes }}<br>
     <strong>Username:</strong> {{ selectedRecord?.username }}<br>
@@ -113,26 +113,26 @@
   <div *ngIf="currentSection === 'edit-form'">
     <button class="btn btn-secondary" (click)="toggleSection('records')">Back to Records</button>
     <br><br>
-    <h2>Edit Class</h2>
+    <h2>Edit Teacher</h2>
     <form id="editForm" (submit)="updateRecord()">
       <div class="form-group">
         <label for="editTeacher">Teacher Name:</label>
-        <input [(ngModel)]="editingRecord.teacher" name="editTeacher" type="text" class="form-control" id="editTeacher" required>
+        <input [(ngModel)]="editingRecord.teacher_name" name="editTeacher" type="text" class="form-control" id="editTeacher" required>
     </div>
     <div class="form-group">
         <label for="editEmployeeID">ID No.:</label>
-        <input [(ngModel)]="editingRecord.employeeID" name="editEmployeeID" type="text" class="form-control" id="editEmployeeID" required>
+        <input [(ngModel)]="editingRecord.employee_number" name="editEmployeeID" type="text" class="form-control" id="editEmployeeID" required>
     </div>
     <div class="form-group">
         <label for="editContact">Contact Information:</label>
-        <input [(ngModel)]="editingRecord.contact" name="editContact" type="text" class="form-control" id="editContact" required>
+        <input [(ngModel)]="editingRecord.email_address" name="editContact" type="text" class="form-control" id="editContact" required>
     </div>
     <div class="form-group">
         <label for="editCourses">Courses:</label>
         <input [(ngModel)]="editingRecord.courses" name="editCourses" type="text" class="form-control" id="editCourses" required>
     </div>
     <div class="form-group">
-        <label for="editClasses">Courses:</label>
+        <label for="editClasses">Classes:</label>
         <input [(ngModel)]="editingRecord.classes" name="editClasses" type="text" class="form-control" id="editClasses" required>
     </div>
     <div class="form-group">

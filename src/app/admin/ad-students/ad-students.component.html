@@ -32,13 +32,13 @@
           </thead>
           <tbody id="subjectList">
               <!-- Loop through recordsData and display rows -->
-              <tr *ngFor="let item of filteredRecordsData; let i = index">
-                <td>{{ item.student }}</td>
-                <td>{{ item.IDNo }}</td>
+              <tr *ngFor="let record of filteredRecordsData">
+                <td>{{ record.student_name   }}</td>
+                <td>{{ record.student_number  }}</td>
                 <td>
-                    <button class="btn btn-info" (click)="viewRecord(item)">View</button>
-                    <button class="btn btn-warning ml-2" (click)="editRecord(item)">Edit</button>
-                    <button class="btn btn-danger ml-2" (click)="deleteRecord(item)">Delete</button>
+                    <button class="btn btn-info" (click)="viewRecord(record)">View</button>
+                    <button class="btn btn-warning ml-2" (click)="editRecord(record)">Edit</button>
+                    <button class="btn btn-danger ml-2" (click)="deleteRecord(record)">Delete</button>
                 </td>
             </tr>
             
@@ -57,11 +57,11 @@
     <form id="addForm" (submit)="submitForm()">
           <div class="form-group">
               <label for="student">Student Name:</label>
-              <input [(ngModel)]="student" name="student" type="text" class="form-control" id="student" required>
+              <input [(ngModel)]="student_name" name="student" type="text" class="form-control" id="student" required>
           </div>
           <div class="form-group">
               <label for="IDNo">ID No.:</label>
-              <input [(ngModel)]="IDNo" name="IDNo" type="text" class="form-control" id="IDNo" required>
+              <input [(ngModel)]="student_number" name="IDNo" type="text" class="form-control" id="IDNo" required>
           </div>
           <div class="form-group">
               <label for="department">Department:</label>
@@ -69,11 +69,11 @@
           </div>
           <div class="form-group">
               <label for="yearLevel">Year Level:</label>
-              <input [(ngModel)]="yearLevel" name="yearLevel" type="text" class="form-control" id="yearLevel" required>
+              <input [(ngModel)]="year_level" name="yearLevel" type="text" class="form-control" id="yearLevel" required>
           </div>
           <div class="form-group">
               <label for="courses">Courses:</label>
-              <input [(ngModel)]="courses" name="courses" type="text" class="form-control" id="courses" required>
+              <input [(ngModel)]="course" name="courses" type="text" class="form-control" id="courses" required>
           </div>
           <div class="form-group">
               <label for="username">Username:</label>
@@ -96,11 +96,11 @@
   <h2>View Student</h2>
   <br><br>
   <div>
-    <strong>Student Name:</strong> {{ selectedRecord?.student }}<br>
-    <strong>ID No.:</strong> {{ selectedRecord?.IDNo }}<br>
+    <strong>Student Name:</strong> {{ selectedRecord?.student_name  }}<br>
+    <strong>ID No.:</strong> {{ selectedRecord?.student_number  }}<br>
     <strong>Department:</strong> {{ selectedRecord?.department }}<br>
-    <strong>Year Level:</strong> {{ selectedRecord?.yearLevel }}<br>
-    <strong>Courses:</strong> {{ selectedRecord?.courses }}<br>
+    <strong>Year Level:</strong> {{ selectedRecord?.year_level }}<br>
+    <strong>Courses:</strong> {{ selectedRecord?.course }}<br>
     <strong>Username:</strong> {{ selectedRecord?.username }}<br>
     <strong>Password:</strong> {{ selectedRecord?.password }}<br><br>
   </div>
@@ -113,15 +113,15 @@
   <div *ngIf="currentSection === 'edit-form'">
     <button class="btn btn-secondary" (click)="toggleSection('records')">Back to Records</button>
     <br><br>
-    <h2>Edit Class</h2>
+    <h2>Edit Student</h2>
     <form id="editForm" (submit)="updateRecord()">
       <div class="form-group">
         <label for="editStudent">Student Name:</label>
-        <input [(ngModel)]="editingRecord.student" name="editStudent" type="text" class="form-control" id="editStudent" required>
+        <input [(ngModel)]="editingRecord.student_name" name="editStudent" type="text" class="form-control" id="editStudent" required>
     </div>
     <div class="form-group">
         <label for="editIDNo">ID No.:</label>
-        <input [(ngModel)]="editingRecord.IDNo" name="editIDNo" type="text" class="form-control" id="editIDNo" required>
+        <input [(ngModel)]="editingRecord.student_number" name="editIDNo" type="text" class="form-control" id="editIDNo" required>
     </div>
     <div class="form-group">
         <label for="editDepartment">Department:</label>
@@ -129,11 +129,11 @@
     </div>
     <div class="form-group">
         <label for="editYearLevel">Year Level:</label>
-        <input [(ngModel)]="editingRecord.yearLevel" name="editYearLevel" type="text" class="form-control" id="editYearLevel" required>
+        <input [(ngModel)]="editingRecord.year_level" name="editYearLevel" type="text" class="form-control" id="editYearLevel" required>
     </div>
     <div class="form-group">
         <label for="editCourses">Courses:</label>
-        <input [(ngModel)]="editingRecord.courses" name="editCourses" type="text" class="form-control" id="editCourses" required>
+        <input [(ngModel)]="editingRecord.course" name="editCourses" type="text" class="form-control" id="editCourses" required>
     </div>
     <div class="form-group">
         <label for="editUsername">Username:</label>

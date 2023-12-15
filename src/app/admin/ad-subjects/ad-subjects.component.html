@@ -26,19 +26,19 @@
           <thead>
               <tr>
                   <th>Course Name</th>
-                  <th>Course ID</th>
+                  <th>Course Code</th>
                   <th>Action</th>
               </tr>
           </thead>
           <tbody id="subjectList">
               <!-- Loop through recordsData and display rows -->
-              <tr *ngFor="let item of filteredRecordsData; let i = index">
-                <td>{{ item.course }}</td>
-                <td>{{ item.code }}</td>
+              <tr *ngFor="let record of filteredRecordsData">
+                <td>{{ record.course_name }}</td>
+                <td>{{ record.course_code }}</td>
                 <td>
-                    <button class="btn btn-info" (click)="viewRecord(item)">View</button>
-                    <button class="btn btn-warning ml-2" (click)="editRecord(item)">Edit</button>
-                    <button class="btn btn-danger ml-2" (click)="deleteRecord(item)">Delete</button>
+                  <button class="btn btn-info" (click)="viewRecord(record)">View</button>
+                  <button class="btn btn-warning ml-2" (click)="editRecord(record)">Edit</button>
+                  <button class="btn btn-danger ml-2" (click)="deleteRecord(record)">Delete</button>
                 </td>
             </tr>
             
@@ -63,14 +63,6 @@
               <label for="code">Course Code:</label>
               <input [(ngModel)]="code" name="code" type="text" class="form-control" id="code" required>
           </div>
-          <div class="form-group">
-              <label for="instructor">Instructor:</label>
-              <input [(ngModel)]="instructor" name="instructor" type="text" class="form-control" id="instructor" required>
-          </div>
-          <div class="form-group">
-              <label for="classes">Class:</label>
-              <input [(ngModel)]="classes" name="classes" type="text" class="form-control" id="classes" required>
-          </div>
         <button type="submit" class="btn btn-primary">Add</button>
     </form>
 </div>
@@ -79,17 +71,16 @@
 
   <!-- View Form Section -->
   <div *ngIf="currentSection === 'view-form' && selectedRecord">
-  <button class="btn btn-secondary" (click)="toggleSection('records')">Back to Records</button>
-  <br><br>
-  <h2>View Courses</h2>
-  <br><br>
-  <div>
-    <strong>Course Name:</strong> {{ selectedRecord?.course }}<br>
-    <strong>Course Code:</strong> {{ selectedRecord?.code }}<br>
-    <strong>Instructor:</strong> {{ selectedRecord?.instructor }}<br>
-    <strong>Classes:</strong> {{ selectedRecord?.classes }}<br>
+    <button class="btn btn-secondary" (click)="toggleSection('records')">Back to Records</button>
+    <br><br>
+    <h2>View Course</h2>
+    <br><br>
+    <div>
+      <strong>Course Name:</strong> {{ selectedRecord?.course_name }}<br>
+      <strong>Course Code:</strong> {{ selectedRecord?.course_code }}<br>
+      <!-- Add other properties as needed -->
+    </div>
   </div>
-</div>
   
 
 
@@ -98,24 +89,17 @@
   <div *ngIf="currentSection === 'edit-form'">
     <button class="btn btn-secondary" (click)="toggleSection('records')">Back to Records</button>
     <br><br>
-    <h2>Edit Class</h2>
+    <h2>Edit Course</h2>
     <form id="editForm" (submit)="updateRecord()">
       <div class="form-group">
         <label for="editCourse">Course Name:</label>
-        <input [(ngModel)]="editingRecord.course" name="editCourse" type="text" class="form-control" id="editCourse" required>
-    </div>
-    <div class="form-group">
+        <input [(ngModel)]="editingRecord.course_name" name="editCourse" type="text" class="form-control" id="editCourse" required>
+      </div>
+      <div class="form-group">
         <label for="editCode">Course Code:</label>
-        <input [(ngModel)]="editingRecord.code" name="editCode" type="text" class="form-control" id="editCode" required>
-    </div>
-    <div class="form-group">
-        <label for="editInstructor">Instructor:</label>
-        <input [(ngModel)]="editingRecord.instructor" name="editInstructor" type="text" class="form-control" id="editInstructor" required>
-    </div>
-    <div class="form-group">
-        <label for="editClasses">Class:</label>
-        <input [(ngModel)]="editingRecord.classes" name="editClasses" type="text" class="form-control" id="editClasses" required>
-    </div>
+        <input [(ngModel)]="editingRecord.course_code" name="editCode" type="text" class="form-control" id="editCode" required>
+      </div>
+      <!-- Add other fields as needed -->
       <button type="submit" class="btn btn-primary">Save Changes</button>
     </form>
   </div>

@@ -22,8 +22,6 @@
 
       <h2>All Class Record</h2>
 
-      
-
       <table class="table table-striped">
           <thead>
               <tr>
@@ -34,13 +32,13 @@
           </thead>
           <tbody id="subjectList">
               <!-- Loop through recordsData and display rows -->
-              <tr *ngFor="let item of filteredRecordsData; let i = index">
-                <td>{{ item.department }}</td>
-                <td>{{ item.yearLevel }}</td>
+              <tr *ngFor="let record of filteredRecordsData">
+                <td>{{ record.department }}</td>
+                <td>{{ record.year_level }}</td>
                 <td>
-                    <button class="btn btn-info" (click)="viewRecord(item)">View</button>
-                    <button class="btn btn-warning ml-2" (click)="editRecord(item)">Edit</button>
-                    <button class="btn btn-danger ml-2" (click)="deleteRecord(item)">Delete</button>
+                    <button class="btn btn-info" (click)="viewRecord(record)">View</button>
+                    <button class="btn btn-warning ml-2" (click)="editRecord(record)">Edit</button>
+                    <button class="btn btn-danger ml-2" (click)="deleteRecord(record)">Delete</button>
                 </td>
             </tr>
             
@@ -57,43 +55,21 @@
     <br><br>
     <h2>Add Class</h2>
     <form id="addForm" (submit)="submitForm()">
-        <div class="form-group">
+      <div class="form-group">
             <label for="department">Department:</label>
-            <select [(ngModel)]="department" name="department" class="form-control" id="department" required>
-                <option value="Bachelor of Science in Computer Engineering">Bachelor of Science in Computer Engineering</option>
-                <option value="Bachelor of Science in Electronics and Communications Engineering">Bachelor of Science in Electronics and Communications Engineering</option>
-                <option value="Bachelor of Science in Computer Science">Bachelor of Science in Computer Science</option>
-                <option value="Bachelor of Science in Information Technology">Bachelor of Science in Information Technology</option>
-            </select>
+            <input [(ngModel)]="department" name="department" class="form-control" id="department" required>
         </div>
         <div class="form-group">
             <label for="yearLevel">Year Level:</label>
-            <select [(ngModel)]="yearLevel" name="yearLevel" class="form-control" id="yearLevel" required>
-                <option value="Year 1">Year 1</option>
-                <option value="Year 2">Year 2</option>
-                <option value="Year 3">Year 3</option>
-                <option value="Year 4">Year 4</option>
-                <option value="Year 5">Year 5</option>
-            </select>
+            <input [(ngModel)]="yearLevel" name="yearLevel" class="form-control" id="yearLevel" required>
         </div>
         <div class="form-group">
             <label for="block">Block:</label>
-            <select [(ngModel)]="block" name="block" class="form-control" id="block" required>
-                <option value="Block 1">Block 1</option>
-                <option value="Block 2">Block 2</option>
-                <option value="Block 3">Block 3</option>
-                <option value="Block 4">Block 4</option>
-                <option value="Block 5">Block 5</option>
-                <option value="Block 6">Block 6</option>
-                <option value="Block 7">Block 7</option>
-                <option value="Block 8">Block 8</option>
-                <option value="Block 9">Block 9</option>
-                <option value="Block 10">Block 10</option>
-            </select>
+            <input [(ngModel)]="block" name="block" class="form-control" id="block" required>
         </div>
         <button type="submit" class="btn btn-primary">Add</button>
     </form>
-</div>
+  </div>
 
 
 
@@ -105,9 +81,9 @@
   <br><br>
   <div>
     <strong>Department:</strong> {{ selectedRecord?.department }}<br>
-    <strong>Year Level:</strong> {{ selectedRecord?.yearLevel }}<br>
+    <strong>Year Level:</strong> {{ selectedRecord?.year_level }}<br>
     <strong>Block:</strong> {{ selectedRecord?.block }}<br>
-    <strong>List of Students:</strong> {{ selectedRecord?.listStudent }}<br><br>
+    <!--<strong>List of Students:</strong><br><br>-->
   </div>
 </div>
   
@@ -122,37 +98,15 @@
     <form id="editForm" (submit)="updateRecord()">
       <div class="form-group">
         <label for="editDepartment">Department:</label>
-        <select [(ngModel)]="editingRecord.department" name="editDepartment" type="text" class="form-control" id="editDepartment" required>
-                <option value="Bachelor of Science in Computer Engineering">Bachelor of Science in Computer Engineering</option>
-                <option value="Bachelor of Science in Electronics and Communications Engineering">Bachelor of Science in Electronics and Communications Engineering</option>
-                <option value="Bachelor of Science in Computer Science">Bachelor of Science in Computer Science</option>
-                <option value="Bachelor of Science in Information Technology">Bachelor of Science in Information Technology</option>
-        </select>
+        <input [(ngModel)]="editingRecord.department" name="editDepartment" type="text" class="form-control" id="editDepartment" required>
       </div>
       <div class="form-group">
         <label for="editYearLevel">Year Level:</label>
-        <select [(ngModel)]="editingRecord.yearLevel" name="editYearLevel" type="text" class="form-control" id="editYearLevel" required>
-                <option value="Year 1">Year 1</option>
-                <option value="Year 2">Year 2</option>
-                <option value="Year 3">Year 3</option>
-                <option value="Year 4">Year 4</option>
-                <option value="Year 5">Year 5</option>
-        </select>
+        <input [(ngModel)]="editingRecord.year_level" name="editYearLevel" type="text" class="form-control" id="editYearLevel" required>
       </div>
       <div class="form-group">
         <label for="editBlock">Block:</label>
-        <select [(ngModel)]="editingRecord.block" name="editBlock" type="text" class="form-control" id="editBlock" required>
-                <option value="Block 1">Block 1</option>
-                <option value="Block 2">Block 2</option>
-                <option value="Block 3">Block 3</option>
-                <option value="Block 4">Block 4</option>
-                <option value="Block 5">Block 5</option>
-                <option value="Block 6">Block 6</option>
-                <option value="Block 7">Block 7</option>
-                <option value="Block 8">Block 8</option>
-                <option value="Block 9">Block 9</option>
-                <option value="Block 10">Block 10</option>
-        </select>
+        <input [(ngModel)]="editingRecord.block" name="editBlock" type="text" class="form-control" id="editBlock" required>
       </div>
       <!-- Add more fields as needed -->
       <button type="submit" class="btn btn-primary">Save Changes</button>

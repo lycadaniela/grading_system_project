@@ -1,73 +1,106 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { TeacherService } from 'src/app/services/teacher.service';
 
 @Component({
   selector: 'app-ad-teachers',
   templateUrl: './ad-teachers.component.html',
   styleUrls: ['./ad-teachers.component.scss']
 })
-export class AdTeachersComponent {
+export class AdTeachersComponent implements OnInit {
+
+  apiUrl = 'http://localhost:3000/api/teachers';
 
   currentSection: string = 'records';
   recordsData: any[] = [];
-  selectedRecord: any = { teacher: '', employeeID: '', contact: '', courses: '', classes: '', username: '', password: ''};
+  selectedRecord: any = { teacher_name: '', employee_number: '', email_address: '', courses: '', classes: '', username: '', password: '' };
   editingRecord: any = null;
-  
 
   // Form data properties
-  teacher: string = '';
-  employeeID: string = '';
-  contact: string = '';
+  teacher_name: string = '';
+  employee_number: string = '';
+  email_address: string = '';
   courses: string = '';
   classes: string = '';
   username: string = '';
   password: string = '';
 
-  constructor(private cdr: ChangeDetectorRef, private ngZone: NgZone) {
-    // Initialize recordsData with sample data
-    this.recordsData = [
-      // Add more data as needed
-    ];
-  }
-  
+  searchTerm: string = '';
+  filteredRecordsData: any[] = [];
 
-  toggleSection(section: string, record?: any) {
-    console.log('Toggling section:', section, 'Record:', record);
-  
-    this.ngZone.run(() => {
-      this.currentSection = section;
-  
-      if (section !== 'view-form') {
-        this.selectedRecord = null;
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone,
+    private http: HttpClient,
+    private teacherService: TeacherService
+  ) {}
+
+  ngOnInit() {
+    this.loadRecords();
+  }
+
+ loadRecords() {
+  this.teacherService.getAllTeacher().subscribe(
+    (data) => {
+      this.recordsData = data;
+      this.filteredRecordsData = [...this.recordsData];
+    },
+    (error) => {
+      console.error('GET Error:', error);
+
+      if (error instanceof HttpErrorResponse) {
+        console.error('Server Error Status:', error.status);
+        console.error('Server Error Body:', error.error);
       }
-  
-      this.cdr.detectChanges();
-    });
-  }
+    }
+  );
+}
 
-  submitForm() {
+
+submitForm() {
+  if (this.teacher_name && this.employee_number && this.email_address && this.courses && this.classes && this.username && this.password) {
     const formData = {
-      id: this.nextRecordId++,
-      teacher: this.teacher,
-      employeeID: this.employeeID,
-      contact: this.contact,
+      teacher_name: this.teacher_name,
+      employee_number: this.employee_number,
+      email_address: this.email_address,
       courses: this.courses,
       classes: this.classes,
       username: this.username,
-      password: this.password,
+      password: this.password
     };
-  
-    this.recordsData.push(formData);
-    this.filteredRecordsData = [...this.recordsData];
-  
-    this.clearForm();
-    this.toggleSection('records');
+
+    this.teacherService.createTeacher(formData).subscribe(
+      () => {
+        this.loadRecords();
+        this.clearForm();
+        this.toggleSection('records');
+      },
+      (error) => {
+        console.error('POST Error:', error);
+        // Handle error, e.g., display an error message to the user
+        if (error instanceof HttpErrorResponse) {
+          if (error.status === 400) {
+            // Bad Request
+            console.error('Bad Request:', error.error.message);
+            // Display an error message to the user
+          } else {
+            // Other errors
+            console.error('Server Error:', error.error.message);
+            // Display a generic error message
+          }
+        }
+      }
+    );
+  } else {
+    // Form is not valid, display an error message or handle accordingly
   }
+}
 
   clearForm() {
-    this.teacher = '';
-    this.employeeID = '';
-    this.contact = '';
+    this.teacher_name = '';
+    this.employee_number = '';
+    this.email_address = '';
     this.courses = '';
     this.classes = '';
     this.username = '';
@@ -75,54 +108,70 @@ export class AdTeachersComponent {
   }
 
   viewRecord(record: any) {
-    this.selectedRecord = record;
-    this.toggleSection('view-form');
+    this.teacherService.getTeacherById(record.teacher_id).subscribe(
+      (detailedRecord) => {
+        this.selectedRecord = detailedRecord;
+        this.toggleSection('view-form');
+      },
+      (error) => {
+        console.error('Error fetching detailed record:', error);
+      }
+    );
   }
 
   deleteRecord(record: any) {
     const index = this.recordsData.indexOf(record);
+  
     if (index !== -1) {
-      this.recordsData.splice(index, 1);
-  
-      // Update filteredRecordsData after deletion
-      this.filteredRecordsData = this.recordsData.filter(item =>
-        item.department.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        item.yearLevel.toLowerCase().includes(this.searchTerm.toLowerCase())
+      this.teacherService.deleteTeacher(record.teacher_id).subscribe(
+        () => {
+          this.recordsData.splice(index, 1);
+          this.filteredRecordsData = [...this.recordsData];
+          console.log('Data deleted:', record);
+        },
+        (error) => {
+          console.error('Error deleting record on the server:', error);
+        }
       );
-  
-      console.log('Data deleted:', record);
     } else {
       console.error('Record not found in recordsData.');
     }
   }
 
   editRecord(record: any) {
-    console.log('Editing Record:', record);
-    // Set editingRecord to a copy of the selected record
-    this.editingRecord = { ...record, id: record.id }; // Ensure 'id' is set
-    console.log('Editing Record (after assignment):', this.editingRecord);
+    this.editingRecord = { ...record, id: record.teacher_id };
     this.toggleSection('edit-form');
   }
 
   updateRecord() {
-    // Find the index of the record to update
-    const index = this.recordsData.findIndex(record => record.id === this.editingRecord.id);
+    const index = this.recordsData.findIndex(record => record.teacher_id === this.editingRecord.id);
   
     if (index !== -1) {
-      // Update the record
-      this.recordsData[index] = { ...this.editingRecord };
+      const updatedData = {
+        teacher_name: this.editingRecord.teacher_name,
+        employee_number: +this.editingRecord.employee_number,
+        email_address: this.editingRecord.email_address,
+        courses: this.editingRecord.courses,
+        classes: this.editingRecord.classes,
+        username: this.editingRecord.username,
+        password: this.editingRecord.password,
+      };
+      
   
-      // Update filteredRecordsData as well
-      this.searchRecords();
-  
-      console.log('Record updated:', this.recordsData[index]);
-      console.log('Updated recordsData:', this.recordsData);
-      console.log('Filtered recordsData:', this.filteredRecordsData);
-  
-      this.clearEditForm();
-      this.toggleSection('records');
+      this.teacherService.updateTeacher(this.editingRecord.id, updatedData).subscribe(
+        () => {
+          this.recordsData[index] = { teacher_id: this.editingRecord.id, ...updatedData };
+          console.log('Updated client-side data:', this.recordsData);
+          this.clearEditForm();
+          this.toggleSection('records');
+        },
+        (error) => {
+          console.error('Error updating record on the server:', error);
+          console.error('Server Response:', error.error);
+        }
+      );
     } else {
-      console.error('Record not found in recordsData.');
+      console.error('Record not found in recordsData. Editing Record ID:', this.editingRecord.id);
     }
   }
 
@@ -130,27 +179,35 @@ export class AdTeachersComponent {
     this.editingRecord = null;
   }
 
-  ngOnInit() {
-    console.log('Initial recordsData:', this.recordsData);
+  searchRecords() {
+    if (this.searchTerm.trim() === '') {
+      this.loadRecords();
+    } else {
+      this.teacherService.searchTeacher(this.searchTerm).subscribe(
+        (data) => {
+          this.filteredRecordsData = data;
+        },
+        (error) => {
+          console.error('Error searching records:', error);
+        }
+      );
+    }
   }
 
-  // Add the searchTerm property at the top of your component
-searchTerm: string = '';
-filteredRecordsData: any[] = [];
+  resetSearch() {
+    this.searchTerm = '';
+    this.searchRecords();
+  }
 
-searchRecords() {
-  // Perform the search based on the searchTerm
-  this.filteredRecordsData = this.recordsData.filter(item =>
-      item.department.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      item.yearLevel.toLowerCase().includes(this.searchTerm.toLowerCase())
-  );
-}
+  toggleSection(section: string) {
+    this.ngZone.run(() => {
+      this.currentSection = section;
 
-resetSearch() {
-  this.searchTerm = ''; // Reset the search term
-  this.searchRecords(); // Call the searchRecords method to reset the table
-}
+      if (section !== 'view-form') {
+        this.selectedRecord = null;
+      }
 
-nextRecordId: number = 1;
-
+      this.cdr.detectChanges();
+    });
+  }
 }
