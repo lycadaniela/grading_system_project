@@ -1,14 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StudentService {
   private apiUrl = 'http://localhost:3000/api/students';
-  departmentsUrl = 'http://localhost:3000/api/classes';
-  coursesUrl = 'http://localhost:3000/api/courses';
 
   constructor(private http: HttpClient) {}
 
@@ -44,11 +42,11 @@ export class StudentService {
     return this.http.get<any[]>(url);
   }
 
-  getDepartments(): Observable<any> {
-    return this.http.get<any>(this.departmentsUrl);
+  getStudentData(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
   }
 
-  getCourses(): Observable<any> {
-    return this.http.get<any>(this.coursesUrl);
+  getStudentLength(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/students`);
   }
 }
